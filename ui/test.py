@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore,  QtWidgets
 from db import *
 
 con, message = connection()
@@ -44,7 +44,10 @@ class Ui_MainWindow(object):
         ###
         self.btn_create_table.clicked.connect(lambda: create_table('users'))
         self.btn_list_users.clicked.connect(lambda: list_all_tables())
-        self.btn_insert.clicked.connect(lambda: insert_into('users'))
+        self.btn_insert.clicked.connect(lambda: insert_into('users',
+                                                            name='name',
+                                                            password=123,
+                                                            email='email@test.com'))
         self.btn_drop.clicked.connect(lambda: drop_table('users'))
         self.btn_update.clicked.connect(lambda: update_table('users'))
 

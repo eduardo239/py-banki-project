@@ -1,8 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMessageBox, qApp
+from PyQt5.QtWidgets import qApp
 
 from db import *
-from ui import Registro, RegistroDeClientes
+from ui import Registro, RegistroDeClientes, test
+
+import time
 
 con, message = connection()
 
@@ -11,8 +13,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(302, 359)
+        MainWindow.resize(300, 360)
         MainWindow.setStyleSheet("")
+        MainWindow.setFixedSize(300, 360)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -108,6 +111,13 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.inp_senha, self.btn_login)
 
         ###
+
+        self.window = QtWidgets.QMainWindow()
+        self.ui = test.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+        ###
         self.action_Exit.triggered.connect(qApp.quit)
         self.action_Register.triggered.connect(self.register_window)
 
@@ -130,9 +140,15 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Sair do aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
 
+
     ###
+    def user_register_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = RegistroDeClientes.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
     def register_window(self):
-        print(self)
         self.window = QtWidgets.QMainWindow()
         self.ui = Registro.Ui_MainWindow()
         self.ui.setupUi(self.window)
@@ -146,11 +162,17 @@ class Ui_MainWindow(object):
 
     ###
     def login(self):
-        email = self.inp_email.text()
+        email = self.inp_email.text().strip()
         password = self.inp_senha.text()
 
         try:
-            select_by_id('users', field='email', value=email)
+            login = select_by('users', field='email', value=email)
+
+            print(login)
+            if login:
+                self.user_register_window()
+            else:
+                self.lbl_messages.setText('Usuário e/ou senha não encontrados.')
         except:
             m = 'Erro ao fazer o login.'
             print(m)
@@ -173,3 +195,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+

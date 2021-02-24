@@ -1,13 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtSql import QSqlQuery
 from db import *
-from ui import ListaDeUsuarios, test
+from ui import ListaDeUsuarios
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(663, 571)
+        MainWindow.resize(665, 575)
+        MainWindow.setFixedSize(665, 575)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -18,8 +18,8 @@ class Ui_MainWindow(object):
         font.setPointSize(14)
         self.label_10.setFont(font)
         self.label_10.setStyleSheet("padding: 10px;\n"
-"color: \'#00C569\';\n"
-"")
+                                    "color: \'#00C569\';\n"
+                                    "")
         self.label_10.setAlignment(QtCore.Qt.AlignCenter)
         self.label_10.setObjectName("label_10")
         self.verticalLayout.addWidget(self.label_10)
@@ -39,8 +39,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.label)
         self.inp_nome_completo = QtWidgets.QLineEdit(self.groupBox_2)
         self.inp_nome_completo.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+                                             "padding: 4px;\n"
+                                             "margin-bottom: 10px;")
         self.inp_nome_completo.setObjectName("inp_nome_completo")
         self.verticalLayout_3.addWidget(self.inp_nome_completo)
         self.label_2 = QtWidgets.QLabel(self.groupBox_2)
@@ -49,8 +49,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.label_2)
         self.inp_data_nascimento = QtWidgets.QLineEdit(self.groupBox_2)
         self.inp_data_nascimento.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+                                               "padding: 4px;\n"
+                                               "margin-bottom: 10px;")
         self.inp_data_nascimento.setObjectName("inp_data_nascimento")
         self.verticalLayout_3.addWidget(self.inp_data_nascimento)
         self.label_3 = QtWidgets.QLabel(self.groupBox_2)
@@ -59,8 +59,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.label_3)
         self.inp_email = QtWidgets.QLineEdit(self.groupBox_2)
         self.inp_email.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+                                     "padding: 4px;\n"
+                                     "margin-bottom: 10px;")
         self.inp_email.setObjectName("inp_email")
         self.verticalLayout_3.addWidget(self.inp_email)
         self.label_4 = QtWidgets.QLabel(self.groupBox_2)
@@ -69,8 +69,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.label_4)
         self.inp_telefone = QtWidgets.QLineEdit(self.groupBox_2)
         self.inp_telefone.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+                                        "padding: 4px;\n"
+                                        "margin-bottom: 10px;")
         self.inp_telefone.setObjectName("inp_telefone")
         self.verticalLayout_3.addWidget(self.inp_telefone)
         self.label_9 = QtWidgets.QLabel(self.groupBox_2)
@@ -102,8 +102,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.label_5)
         self.inp_agencia = QtWidgets.QLineEdit(self.groupBox_3)
         self.inp_agencia.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+                                       "padding: 4px;\n"
+                                       "margin-bottom: 10px;")
         self.inp_agencia.setObjectName("inp_agencia")
         self.verticalLayout_2.addWidget(self.inp_agencia)
         self.label_6 = QtWidgets.QLabel(self.groupBox_3)
@@ -112,8 +112,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.label_6)
         self.inp_numero_conta = QtWidgets.QLineEdit(self.groupBox_3)
         self.inp_numero_conta.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+                                            "padding: 4px;\n"
+                                            "margin-bottom: 10px;")
         self.inp_numero_conta.setObjectName("inp_numero_conta")
         self.verticalLayout_2.addWidget(self.inp_numero_conta)
         self.label_7 = QtWidgets.QLabel(self.groupBox_3)
@@ -122,7 +122,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.label_7)
         self.cmb_tipo = QtWidgets.QComboBox(self.groupBox_3)
         self.cmb_tipo.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;")
+                                    "padding: 4px;")
         self.cmb_tipo.setObjectName("cmb_tipo")
         self.cmb_tipo.addItem("")
         self.cmb_tipo.addItem("")
@@ -130,22 +130,22 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.cmb_tipo)
         self.label_8 = QtWidgets.QLabel(self.groupBox_3)
         self.label_8.setStyleSheet("font: 10pt \"Calibri\";\n"
-"margin-top: 10px;")
+                                   "margin-top: 10px;")
         self.label_8.setObjectName("label_8")
         self.verticalLayout_2.addWidget(self.label_8)
         self.inp_id = QtWidgets.QLineEdit(self.groupBox_3)
         self.inp_id.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+                                  "padding: 4px;\n"
+                                  "margin-bottom: 10px;")
         self.inp_id.setObjectName("inp_id")
         self.verticalLayout_2.addWidget(self.inp_id)
         self.btn_registrar = QtWidgets.QPushButton(self.groupBox_3)
         self.btn_registrar.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 8px;\n"
-"background-color: \'#00C569\'; \n"
-"color: white;\n"
-"border: none;\n"
-"margin: 4px 0;")
+                                         "padding: 8px;\n"
+                                         "background-color: \'#00C569\'; \n"
+                                         "color: white;\n"
+                                         "border: none;\n"
+                                         "margin: 4px 0;")
         self.btn_registrar.setObjectName("btn_registrar")
         self.verticalLayout_2.addWidget(self.btn_registrar)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -158,7 +158,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.lbl_messages.setFont(font)
         self.lbl_messages.setStyleSheet("color: \'#333A44\';\n"
-"padding: 10px;")
+                                        "padding: 10px;")
         self.lbl_messages.setObjectName("lbl_messages")
         self.verticalLayout.addWidget(self.lbl_messages)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -282,14 +282,14 @@ class Ui_MainWindow(object):
         self.window.show()
 
     def client_register(self):
-        email = self.inp_email.text()
-        name = self.inp_nome_completo.text()
-        birth = self.inp_data_nascimento.text()
-        phone = self.inp_telefone.text()
+        email = self.inp_email.text().strip()
+        name = self.inp_nome_completo.text().strip()
+        birth = self.inp_data_nascimento.text().strip()
+        phone = self.inp_telefone.text().strip()
         gender = lambda x: 'masculino' if self.rad_masculino.isChecked() else 'feminino'
 
         try:
-            insert_into('users',
+            insert_into('clients',
                         email=email,
                         name=name,
                         birth=birth,
@@ -301,17 +301,10 @@ class Ui_MainWindow(object):
             print(m)
             self.lbl_messages.setText(m)
 
-    '''
-    def teste(self):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = test.Ui_MainWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
-    '''
-
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

@@ -1,10 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from db import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(325, 489)
+        MainWindow.resize(300, 490)
+        MainWindow.setFixedSize(300, 490)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -125,6 +126,9 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.inp_senha_novamente, self.inp_nome_completo)
         MainWindow.setTabOrder(self.inp_nome_completo, self.btn_registrar)
 
+        ###
+        self.btn_registrar.clicked.connect(self.register)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -142,6 +146,15 @@ class Ui_MainWindow(object):
         self.action_Exit.setText(_translate("MainWindow", "&Exit"))
         self.action_Exit.setStatusTip(_translate("MainWindow", "Sair do programa"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
+
+    def register(self):
+        email = self.inp_email.text().strip()
+        password = self.inp_senha.text().strip()
+        name = self.inp_nome_completo.text().strip()
+        insert_into('users',
+                    email=email,
+                    password=password,
+                    name=name)
 
 
 if __name__ == "__main__":

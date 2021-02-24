@@ -24,41 +24,40 @@ def connection():
 def create_table(table_name, **kwargs):
     sql = f"""CREATE TABLE IF NOT EXISTS {table_name} (
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-        name VARCHAR(40) NOT NULL,
-        job VARCHAR(50),
-        email VARCHAR(40) NOT NULL
+        name VARCHAR(46) NOT NULL,
+        email VARCHAR(46) NOT NULL UNIQUE,
+        password VARCHAR(46) NOT NULL
         )"""
 
-    query = QSqlQuery()
-    query.exec_(sql)
+    q = QSqlQuery()
+    q.exec_(sql)
     print(sql)
 
 
 def insert_into(table_name, **kwargs):
-    name = "linda"
-    job = "web"
-    email = "linda@at.com"
-
-    sql = f"""INSERT INTO {table_name} 
-        (name, job, email) 
+    sql = f"""INSERT INTO '{table_name}' 
+        (name, password, email) 
         VALUES 
-        ('{name}', '{job}', '{email}')"""
+        ('{kwargs["name"]}', '{kwargs["password"]}', '{kwargs["email"]}')"""
 
-    query = QSqlQuery()
-    query.exec_(sql)
+    q = QSqlQuery()
+    q.exec_(sql)
     print(sql)
 
 
 def list_all_tables():
-    sql = """SELECT name, job, email FROM users"""
-    querySelect = QSqlQuery()
-    querySelect.exec_(sql)
+    sql = """SELECT name, password, email FROM users"""
+    q = QSqlQuery()
+    q.exec_(sql)
     print(sql)
 
-    name, job, email = range(3)
+    name, password, email = range(3)
+    result = []
 
-    while querySelect.next():
-        print(querySelect.value(name), querySelect.value(email))
+    while q.next():
+        print(q.value(name), q.value(password), q.value(email))
+        result.append([q.value(name), q.value(password), q.value(email)])
+    return result
 
 
 def drop_table(table_name):
@@ -70,15 +69,23 @@ def drop_table(table_name):
 
 def update_table(table_name, **kwargs):
     sql = f"""UPDATE {table_name} SET 'name' = 'lorena' 
-    WHERE id = 1 """
+    WHERE 'email' = {kwargs["email"]} """
     query = QSqlQuery()
     query.exec_(sql)
     print(sql)
 
 
-def select_by_id(table_name, **kwargs):
-    sql = f"""SELECT * FROM '{table_name}' 
-    WHERE '{kwargs["field"]}' = '{kwargs["value"]}'"""
+def select_by(table_name, **kwargs):
+    sql = f"""SELECT name, password, email FROM {table_name} WHERE {kwargs["field"]} = '{kwargs["value"]}'"""
     q = QSqlQuery()
     q.exec_(sql)
     print(sql)
+
+    name, password = range(2)
+    results = []
+
+    while q.next():
+        print(q.value(name), q.value(password))
+        results.append([q.value(name), q.value(password)])
+
+    return results[0]
