@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>764</width>
-    <height>537</height>
+    <height>542</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -146,6 +146,20 @@ margin: 4px 0;</string>
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lbl_message">
+      <property name="styleSheet">
+       <string notr="true">color: '#333A44';
+padding: 10px;</string>
+      </property>
+      <property name="text">
+       <string>Messages</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
