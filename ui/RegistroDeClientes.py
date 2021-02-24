@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'Registro_de_cliente.ui'
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtSql import QSqlQuery
-
-from ui import ListaDeUsuarios
+from db import *
+from ui import ListaDeUsuarios, test
 
 
 class Ui_MainWindow(object):
@@ -289,10 +286,28 @@ class Ui_MainWindow(object):
         name = self.inp_nome_completo.text()
         birth = self.inp_data_nascimento.text()
         phone = self.inp_telefone.text()
-        if self.rad_masculino.isChecked():
-            gender = 'masculino'
-        else:
-            gender = 'feminino'
+        gender = lambda x: 'masculino' if self.rad_masculino.isChecked() else 'feminino'
+
+        try:
+            insert_into('users',
+                        email=email,
+                        name=name,
+                        birth=birth,
+                        phone=phone,
+                        gender=gender
+                        )
+        except:
+            m = 'Erro ao registrar um novo usuário.'
+            print(m)
+            self.lbl_messages.setText(m)
+
+    '''
+    def teste(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = test.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+    '''
 
 
 if __name__ == "__main__":

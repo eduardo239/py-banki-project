@@ -35,9 +35,9 @@ createTableQuery.exec(
 print(con.tables())
 
 # dynamic
-name = "linda"
-job = "web"
-email = "linda@at.com"
+name = "linda2"
+job = "web2"
+email = "linda2@at.com"
 
 query = QSqlQuery()
 query.exec_(

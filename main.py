@@ -1,10 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, qApp
 
-from db import connection
+from db import *
 from ui import Registro, RegistroDeClientes
 
-connected = connection()
+con, message = connection()
 
 
 class Ui_MainWindow(object):
@@ -111,7 +111,7 @@ class Ui_MainWindow(object):
         self.action_Exit.triggered.connect(qApp.quit)
         self.action_Register.triggered.connect(self.register_window)
 
-        self.btn_login.clicked.connect(self.client_register_window)
+        self.btn_login.clicked.connect(self.login)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -121,7 +121,7 @@ class Ui_MainWindow(object):
         self.btn_login.setText(_translate("MainWindow", "Login"))
         self.label.setText(_translate("MainWindow", "Email"))
         self.label_2.setText(_translate("MainWindow", "Senha"))
-        self.lbl_messages.setText(_translate("MainWindow", connected))
+        self.lbl_messages.setText(_translate("MainWindow", message))
         self.menu_File.setTitle(_translate("MainWindow", "&File"))
         self.action_Register.setText(_translate("MainWindow", "&Register"))
         self.action_Register.setStatusTip(_translate("MainWindow", "Registrar um novo usuário"))
@@ -143,6 +143,18 @@ class Ui_MainWindow(object):
         self.ui = RegistroDeClientes.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
+
+    ###
+    def login(self):
+        email = self.inp_email.text()
+        password = self.inp_senha.text()
+
+        try:
+            select_by_id('users', field='email', value=email)
+        except:
+            m = 'Erro ao fazer o login.'
+            print(m)
+            self.lbl_messages.setText(m)
 
 
 '''
