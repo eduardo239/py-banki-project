@@ -2,6 +2,7 @@
 
 # Form implementation generated from reading ui file 'Registro_de_cliente.ui'
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtSql import QSqlQuery
 
 from ui import ListaDeUsuarios
 
@@ -59,12 +60,12 @@ class Ui_MainWindow(object):
         self.label_3.setStyleSheet("font: 10pt \"Calibri\";")
         self.label_3.setObjectName("label_3")
         self.verticalLayout_3.addWidget(self.label_3)
-        self.inp_endereco = QtWidgets.QLineEdit(self.groupBox_2)
-        self.inp_endereco.setStyleSheet("font: 10pt \"Calibri\";\n"
+        self.inp_email = QtWidgets.QLineEdit(self.groupBox_2)
+        self.inp_email.setStyleSheet("font: 10pt \"Calibri\";\n"
 "padding: 4px;\n"
 "margin-bottom: 10px;")
-        self.inp_endereco.setObjectName("inp_endereco")
-        self.verticalLayout_3.addWidget(self.inp_endereco)
+        self.inp_email.setObjectName("inp_email")
+        self.verticalLayout_3.addWidget(self.inp_email)
         self.label_4 = QtWidgets.QLabel(self.groupBox_2)
         self.label_4.setStyleSheet("font: 10pt \"Calibri\";")
         self.label_4.setObjectName("label_4")
@@ -232,6 +233,7 @@ class Ui_MainWindow(object):
 
         ###
         self.actionLista_de_Usu_rios.triggered.connect(self.user_list_window)
+        self.btn_registrar.clicked.connect(self.client_register)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -243,7 +245,7 @@ class Ui_MainWindow(object):
         self.groupBox_2.setTitle(_translate("MainWindow", "Informações do Cliente"))
         self.label.setText(_translate("MainWindow", "Nome Completo"))
         self.label_2.setText(_translate("MainWindow", "Data de Nascimento"))
-        self.label_3.setText(_translate("MainWindow", "Endereço"))
+        self.label_3.setText(_translate("MainWindow", "Email"))
         self.label_4.setText(_translate("MainWindow", "Telefone"))
         self.label_9.setText(_translate("MainWindow", "Gênero"))
         self.rad_masculino.setText(_translate("MainWindow", "Masculino"))
@@ -281,6 +283,17 @@ class Ui_MainWindow(object):
         self.ui = ListaDeUsuarios.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
+
+    def client_register(self):
+        email = self.inp_email.text()
+        name = self.inp_nome_completo.text()
+        birth = self.inp_data_nascimento.text()
+        phone = self.inp_telefone.text()
+        if self.rad_masculino.isChecked():
+            gender = 'masculino'
+        else:
+            gender = 'feminino'
+
 
 if __name__ == "__main__":
     import sys

@@ -95,12 +95,12 @@ margin-bottom: 10px;</string>
              <string notr="true">font: 10pt &quot;Calibri&quot;;</string>
             </property>
             <property name="text">
-             <string>Endereço</string>
+             <string>Email</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="inp_endereco">
+           <widget class="QLineEdit" name="inp_email">
             <property name="styleSheet">
              <string notr="true">font: 10pt &quot;Calibri&quot;;
 padding: 4px;
