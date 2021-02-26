@@ -1,9 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from db import *
+from ui.styles import *
 from ui import ListaDeUsuarios, Sobre
 import main
 
-import uuid
+
+
 
 
 class Ui_MainWindow(object):

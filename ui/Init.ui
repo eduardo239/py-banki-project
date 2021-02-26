@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>250</width>
+    <height>218</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="styleSheet">
+          <string notr="true">font: 10pt &quot;Calibri&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Usuário</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_usuario">
+         <property name="styleSheet">
+          <string notr="true">font: 10pt &quot;Calibri&quot;;
+padding: 8px;
+background-color: '#00C569'; 
+color: white;
+border: none;
+margin: 4px 0;</string>
+         </property>
+         <property name="text">
+          <string>Entrar</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="styleSheet">
+          <string notr="true">font: 10pt &quot;Calibri&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Funcionário</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_funcionario">
+         <property name="styleSheet">
+          <string notr="true">font: 10pt &quot;Calibri&quot;;
+padding: 8px;
+background-color: '#2E14C4'; 
+color: white;
+border: none;
+margin: 4px 0;</string>
+         </property>
+         <property name="text">
+          <string>Entrar</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>250</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;Arquivo</string>
+    </property>
+    <addaction name="action_Exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Sobre">
+    <property name="title">
+     <string>&amp;Ajuda</string>
+    </property>
+    <addaction name="action_Sobre"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_Sobre"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_Exit">
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+   <property name="statusTip">
+    <string>Sair do programa</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="action_Sobre">
+   <property name="text">
+    <string>&amp;Sobre</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

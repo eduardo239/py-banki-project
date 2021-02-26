@@ -42,9 +42,16 @@ def create_table(table_name, **kwargs):
         password VARCHAR(46) NOT NULL
         );"""
 
+    sql_conta = f"""CREATE TABLE IF NOT EXISTS account(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+        saldo REAL,
+        account_id INTEGER,
+        FOREIGN KEY(account_id) REFERENCES clients(account_number)
+        );"""
+
     q = QSqlQuery()
-    q.exec_(sql2)
-    print(sql2)
+    q.exec_(sql_conta)
+    print(sql_conta)
 
 
 def insert_into(table_name, **kwargs):
