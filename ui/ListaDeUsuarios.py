@@ -1,11 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtSql import QSqlTableModel
+from PyQt5.QtWidgets import qApp
+from PyQt5.QtCore import Qt
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(765, 545)
-        MainWindow.setFixedSize(765, 545)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -40,6 +42,8 @@ class Ui_MainWindow(object):
 "padding: 4px;\n"
 "margin-bottom: 10px;")
         self.inp_nome_completo.setObjectName("inp_nome_completo")
+        self.inp_nome_completo.setFocus()
+        self.inp_nome_completo.returnPressed.connect(self.search)
         self.verticalLayout_3.addWidget(self.inp_nome_completo)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem)
@@ -57,6 +61,7 @@ class Ui_MainWindow(object):
 "padding: 4px;\n"
 "margin-bottom: 10px;")
         self.inp_numero_conta.setObjectName("inp_numero_conta")
+        self.inp_nome_completo.returnPressed.connect(self.search)
         self.verticalLayout_2.addWidget(self.inp_numero_conta)
         self.btn_buscar = QtWidgets.QPushButton(self.groupBox_3)
         self.btn_buscar.setStyleSheet("font: 10pt \"Calibri\";\n"
@@ -66,6 +71,7 @@ class Ui_MainWindow(object):
 "border: none;\n"
 "margin: 4px 0;")
         self.btn_buscar.setObjectName("btn_buscar")
+        self.btn_buscar.setAutoDefault(True)
         self.verticalLayout_2.addWidget(self.btn_buscar)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem1)
@@ -81,9 +87,29 @@ class Ui_MainWindow(object):
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_4)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+
+        #
+        self.model = QSqlTableModel()
+        self.model.setTable("clients")
+        self.model.setEditStrategy(QSqlTableModel.OnFieldChange)
+        self.model.setHeaderData(0, Qt.Horizontal, "ID")
+        self.model.setHeaderData(1, Qt.Horizontal, "Nome")
+        self.model.setHeaderData(2, Qt.Horizontal, "Email")
+        self.model.setHeaderData(3, Qt.Horizontal, "Gênero")
+        self.model.setHeaderData(4, Qt.Horizontal, "Número da Conta")
+        self.model.setHeaderData(5, Qt.Horizontal, "Tipo da Conta")
+        self.model.setHeaderData(6, Qt.Horizontal, "Password")
+        self.model.removeColumn(6)
+        self.model.select()
+
+        #
         self.tab_resultado = QtWidgets.QTableView(self.groupBox_4)
         self.tab_resultado.setObjectName("tab_resultado")
+        self.tab_resultado.setModel(self.model)
+        self.tab_resultado.resizeColumnsToContents()
+        self.tab_resultado.resizeRowsToContents()
         self.verticalLayout_4.addWidget(self.tab_resultado)
+        #
         self.verticalLayout.addWidget(self.groupBox_4)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem2)
@@ -111,14 +137,21 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuAr_quivo.menuAction())
         self.menubar.addAction(self.menuRelat_rio.menuAction())
 
+        # self.client_list = select_all('clients')
+
+        '''edited'''
+        self.action_Exit.triggered.connect(lambda: MainWindow.close())
+
+        self.btn_buscar.clicked.connect(self.search)
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Bankii - Lista de Clientes"))
         self.label_10.setText(_translate("MainWindow", "Lista de Cliente"))
-        self.groupBox_2.setTitle(_translate("MainWindow", "Informações do Cliente"))
+        self.groupBox_2.setTitle(_translate("MainWindow", "Buscar Cliente"))
         self.label.setText(_translate("MainWindow", "Nome Completo"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Informações da Conta"))
         self.label_6.setText(_translate("MainWindow", "Número da Conta"))
@@ -133,6 +166,10 @@ class Ui_MainWindow(object):
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.action_Imprimir.setText(_translate("MainWindow", "&Imprimir"))
         self.action_Imprimir.setShortcut(_translate("MainWindow", "Ctrl+I"))
+
+    def search(self):
+
+        pass
 
 
 if __name__ == "__main__":

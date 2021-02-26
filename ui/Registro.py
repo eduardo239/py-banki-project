@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import qApp
 from db import *
 
 class Ui_MainWindow(object):
@@ -24,6 +25,7 @@ class Ui_MainWindow(object):
 "padding: 4px;\n"
 "margin-bottom: 10px;")
         self.inp_email.setObjectName("inp_email")
+        self.inp_email.setFocus()
         self.gridLayout.addWidget(self.inp_email, 2, 0, 1, 1)
         self.inp_senha = QtWidgets.QLineEdit(self.groupBox)
         self.inp_senha.setStyleSheet("font: 10pt \"Calibri\";\n"
@@ -58,6 +60,7 @@ class Ui_MainWindow(object):
 "padding: 4px;\n"
 "margin-bottom: 10px;")
         self.inp_senha_novamente.setObjectName("inp_senha_novamente")
+        self.inp_senha_novamente.setEchoMode(QtWidgets.QLineEdit.Password)
         self.gridLayout.addWidget(self.inp_senha_novamente, 6, 0, 1, 1)
         self.label_4 = QtWidgets.QLabel(self.groupBox)
         self.label_4.setStyleSheet("font: 10pt \"Calibri\";")
@@ -68,6 +71,13 @@ class Ui_MainWindow(object):
 "padding: 4px;\n"
 "margin-bottom: 10px;")
         self.inp_nome_completo.setObjectName("inp_nome_completo")
+
+        self.inp_email.returnPressed.connect(self.register)
+        self.inp_senha.returnPressed.connect(self.register)
+        self.inp_senha_novamente.returnPressed.connect(self.register)
+        self.inp_nome_completo.returnPressed.connect(self.register)
+        self.btn_registrar.setAutoDefault(True)
+
         self.gridLayout.addWidget(self.inp_nome_completo, 8, 0, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout.addItem(spacerItem, 11, 0, 1, 1)
@@ -128,10 +138,11 @@ class Ui_MainWindow(object):
 
         ###
         self.btn_registrar.clicked.connect(self.register)
+        self.action_Exit.triggered.connect(lambda : MainWindow.close())
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Bankii - Registro de Usuários"))
         self.groupBox.setTitle(_translate("MainWindow", "Registrar"))
         self.label_2.setText(_translate("MainWindow", "Senha"))
         self.label.setText(_translate("MainWindow", "Email"))
@@ -148,13 +159,23 @@ class Ui_MainWindow(object):
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
 
     def register(self):
+        self.lbl_messages.setText('')
         email = self.inp_email.text().strip()
         password = self.inp_senha.text().strip()
         name = self.inp_nome_completo.text().strip()
-        insert_into('users',
-                    email=email,
-                    password=password,
-                    name=name)
+        try:
+            register_user(
+                        email=email,
+                        password=password,
+                        name=name)
+            self.inp_email.setText('')
+            self.inp_senha.setText('')
+            self.inp_senha_novamente.setText('')
+            self.inp_nome_completo.setText('')
+            self.lbl_messages.setText('Cadastro realizado com sucesso.')
+            self.inp_email.setFocus()
+        except:
+            self.lbl_messages.setText('Erro ao registrar o usuário.')
 
 
 if __name__ == "__main__":

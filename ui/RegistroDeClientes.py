@@ -1,6 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from db import *
-from ui import ListaDeUsuarios
+from ui import ListaDeUsuarios, Sobre
+import main
+
+import uuid
 
 
 class Ui_MainWindow(object):
@@ -42,12 +45,13 @@ class Ui_MainWindow(object):
                                              "padding: 4px;\n"
                                              "margin-bottom: 10px;")
         self.inp_nome_completo.setObjectName("inp_nome_completo")
+        self.inp_nome_completo.setFocus()
         self.verticalLayout_3.addWidget(self.inp_nome_completo)
         self.label_2 = QtWidgets.QLabel(self.groupBox_2)
         self.label_2.setStyleSheet("font: 10pt \"Calibri\";")
         self.label_2.setObjectName("label_2")
         self.verticalLayout_3.addWidget(self.label_2)
-        self.inp_data_nascimento = QtWidgets.QLineEdit(self.groupBox_2)
+        self.inp_data_nascimento = QtWidgets.QDateEdit(self.groupBox_2)
         self.inp_data_nascimento.setStyleSheet("font: 10pt \"Calibri\";\n"
                                                "padding: 4px;\n"
                                                "margin-bottom: 10px;")
@@ -62,6 +66,7 @@ class Ui_MainWindow(object):
                                      "padding: 4px;\n"
                                      "margin-bottom: 10px;")
         self.inp_email.setObjectName("inp_email")
+        self.inp_email.setPlaceholderText("email@email.com")
         self.verticalLayout_3.addWidget(self.inp_email)
         self.label_4 = QtWidgets.QLabel(self.groupBox_2)
         self.label_4.setStyleSheet("font: 10pt \"Calibri\";")
@@ -72,6 +77,7 @@ class Ui_MainWindow(object):
                                         "padding: 4px;\n"
                                         "margin-bottom: 10px;")
         self.inp_telefone.setObjectName("inp_telefone")
+        self.inp_telefone.setInputMask("(99) 99999-9999")
         self.verticalLayout_3.addWidget(self.inp_telefone)
         self.label_9 = QtWidgets.QLabel(self.groupBox_2)
         self.label_9.setStyleSheet("font: 10pt \"Calibri\";")
@@ -84,6 +90,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.rad_masculino = QtWidgets.QRadioButton(self.groupBox_4)
         self.rad_masculino.setObjectName("rad_masculino")
+        self.rad_masculino.setChecked(True)
         self.horizontalLayout_2.addWidget(self.rad_masculino)
         self.rad_feminino = QtWidgets.QRadioButton(self.groupBox_4)
         self.rad_feminino.setObjectName("rad_feminino")
@@ -105,6 +112,7 @@ class Ui_MainWindow(object):
                                        "padding: 4px;\n"
                                        "margin-bottom: 10px;")
         self.inp_agencia.setObjectName("inp_agencia")
+        self.inp_agencia.setInputMask("9999-9")
         self.verticalLayout_2.addWidget(self.inp_agencia)
         self.label_6 = QtWidgets.QLabel(self.groupBox_3)
         self.label_6.setStyleSheet("font: 10pt \"Calibri\";")
@@ -133,12 +141,13 @@ class Ui_MainWindow(object):
                                    "margin-top: 10px;")
         self.label_8.setObjectName("label_8")
         self.verticalLayout_2.addWidget(self.label_8)
-        self.inp_id = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_id.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                  "padding: 4px;\n"
-                                  "margin-bottom: 10px;")
-        self.inp_id.setObjectName("inp_id")
-        self.verticalLayout_2.addWidget(self.inp_id)
+        self.inp_password = QtWidgets.QLineEdit(self.groupBox_3)
+        self.inp_password.setStyleSheet("font: 10pt \"Calibri\";\n"
+                                        "padding: 4px;\n"
+                                        "margin-bottom: 10px;")
+        self.inp_password.setObjectName("inp_password")
+        self.inp_password.returnPressed.connect(self.register)
+        self.verticalLayout_2.addWidget(self.inp_password)
         self.btn_registrar = QtWidgets.QPushButton(self.groupBox_3)
         self.btn_registrar.setStyleSheet("font: 10pt \"Calibri\";\n"
                                          "padding: 8px;\n"
@@ -147,6 +156,7 @@ class Ui_MainWindow(object):
                                          "border: none;\n"
                                          "margin: 4px 0;")
         self.btn_registrar.setObjectName("btn_registrar")
+        self.btn_registrar.setAutoDefault(True)
         self.verticalLayout_2.addWidget(self.btn_registrar)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem1)
@@ -171,6 +181,9 @@ class Ui_MainWindow(object):
         self.menu_File.setObjectName("menu_File")
         self.menu_Usu_rio = QtWidgets.QMenu(self.menubar)
         self.menu_Usu_rio.setObjectName("menu_Usu_rio")
+
+        self.menu_Sobre = QtWidgets.QMenu(self.menubar)
+        self.menu_Sobre.setObjectName("menu_Sobre")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -207,6 +220,8 @@ class Ui_MainWindow(object):
         self.action_Logout.setObjectName("action_Logout")
         self.actionLista_de_Usu_rios = QtWidgets.QAction(MainWindow)
         self.actionLista_de_Usu_rios.setObjectName("actionLista_de_Usu_rios")
+        self.action_Sobre = QtWidgets.QAction(MainWindow)
+        self.action_Sobre.setObjectName("action_Sobre")
 
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("assets/5724063391582004496-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -219,8 +234,10 @@ class Ui_MainWindow(object):
         self.menu_Usu_rio.addAction(self.action_Perfil)
         self.menu_Usu_rio.addAction(self.action_Logout)
         self.menu_Usu_rio.addAction(self.actionLista_de_Usu_rios)
+        self.menu_Sobre.addAction(self.action_Sobre)
         self.menubar.addAction(self.menu_File.menuAction())
         self.menubar.addAction(self.menu_Usu_rio.menuAction())
+        self.menubar.addAction(self.menu_Sobre.menuAction())
         self.toolBar.addAction(self.action_Novo)
         self.toolBar.addAction(self.action_Abrir)
         self.toolBar.addAction(self.action_Salvar)
@@ -230,14 +247,17 @@ class Ui_MainWindow(object):
 
         ###
         self.actionLista_de_Usu_rios.triggered.connect(self.user_list_window)
-        self.btn_registrar.clicked.connect(self.client_register)
+        self.action_Logout.triggered.connect(self.user_logout)
+        self.action_Sobre.triggered.connect(self.about_window)
+        self.btn_registrar.clicked.connect(self.register)
+        self.action_Exit.triggered.connect(lambda: MainWindow.close())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Bankii - Registro de Clientes"))
         self.label_10.setText(_translate("MainWindow", "Registro de Cliente"))
         self.groupBox_2.setTitle(_translate("MainWindow", "Informações do Cliente"))
         self.label.setText(_translate("MainWindow", "Nome Completo"))
@@ -254,13 +274,14 @@ class Ui_MainWindow(object):
         self.cmb_tipo.setItemText(0, _translate("MainWindow", "A"))
         self.cmb_tipo.setItemText(1, _translate("MainWindow", "B"))
         self.cmb_tipo.setItemText(2, _translate("MainWindow", "C"))
-        self.label_8.setText(_translate("MainWindow", "ID"))
+        self.label_8.setText(_translate("MainWindow", "Password"))
         self.btn_registrar.setText(_translate("MainWindow", "Registrar"))
         self.lbl_messages.setText(_translate("MainWindow", "Messages"))
-        self.menu_File.setTitle(_translate("MainWindow", "A&rquivo"))
+        self.menu_File.setTitle(_translate("MainWindow", "&Arquivo"))
         self.menu_Usu_rio.setTitle(_translate("MainWindow", "&Usuário"))
+        self.menu_Sobre.setTitle(_translate("MainWindow", "Ajuda"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-        self.action_Abrir.setText(_translate("MainWindow", "&Abrir"))
+        self.action_Abrir.setText(_translate("MainWindow", "A&brir"))
         self.action_Abrir.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.action_Salvar.setText(_translate("MainWindow", "&Salvar"))
         self.action_Salvar.setShortcut(_translate("MainWindow", "Ctrl+S"))
@@ -272,34 +293,73 @@ class Ui_MainWindow(object):
         self.action_Perfil.setShortcut(_translate("MainWindow", "Ctrl+P"))
         self.action_Logout.setText(_translate("MainWindow", "&Logout"))
         self.action_Logout.setShortcut(_translate("MainWindow", "Ctrl+L"))
-        self.actionLista_de_Usu_rios.setText(_translate("MainWindow", "Lista de Usuários"))
+        self.actionLista_de_Usu_rios.setText(_translate("MainWindow", "Lis&ta de Usuários"))
+        self.actionLista_de_Usu_rios.setShortcut(_translate("MainWindow", "Ctrl+E"))
+        self.action_Sobre.setText(_translate("MainWindow", "Sobre"))
 
-    ###
+        self.lbl_messages.setText(str('active_user'))
+
+    '''edited'''
     def user_list_window(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = ListaDeUsuarios.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 
-    def client_register(self):
+    def user_logout(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = main.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def register(self):
         email = self.inp_email.text().strip()
         name = self.inp_nome_completo.text().strip()
-        birth = self.inp_data_nascimento.text().strip()
         phone = self.inp_telefone.text().strip()
-        gender = lambda x: 'masculino' if self.rad_masculino.isChecked() else 'feminino'
 
-        try:
-            insert_into('clients',
-                        email=email,
-                        name=name,
-                        birth=birth,
-                        phone=phone,
-                        gender=gender
-                        )
-        except:
-            m = 'Erro ao registrar um novo usuário.'
-            print(m)
-            self.lbl_messages.setText(m)
+        if self.rad_masculino.isChecked():
+            gender = self.rad_masculino.text()
+        elif self.rad_feminino.isChecked():
+            gender = self.rad_feminino.text()
+        else:
+            gender = 'none'
+        agency = self.inp_agencia.text().strip()
+        account_number = self.inp_numero_conta.text().strip()
+        account_type = self.cmb_tipo.currentText()
+        password = self.inp_password.text()
+
+        if name != '':
+
+            try:
+                insert_into('clients',
+                            name=name,
+                            email=email,
+                            gender=gender,
+                            account_number=account_number,
+                            account_type=account_type,
+                            password=password
+                            )
+                self.lbl_messages.setText('')
+                self.inp_nome_completo.setStyleSheet("border: 1px solid inherit;\n"
+                                                     "padding: 4px;\n"
+                                                     "margin-bottom: 10px")
+            except QSqlError:
+                print(QSqlError)
+                m = 'Erro ao registrar um novo usuário.'
+                print(m)
+                self.lbl_messages.setText(m)
+        else:
+            self.lbl_messages.setText('Os campos estão vazios')
+            self.lbl_messages.setStyleSheet("color: \'#ff0000\';\n"
+                                            "padding: 10px;")
+            self.inp_nome_completo.setStyleSheet("border: 1px solid red;\n"
+                                                 "padding: 4px;")
+
+    def about_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sobre.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 
 if __name__ == "__main__":

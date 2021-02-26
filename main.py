@@ -1,10 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import qApp
-
 from db import *
-from ui import Registro, RegistroDeClientes, test
-
-import time
+from ui.styles import *
+from ui import Registro, RegistroDeClientes
 
 con, message = connection()
 
@@ -14,7 +12,6 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
         MainWindow.resize(300, 360)
-        MainWindow.setStyleSheet("")
         MainWindow.setFixedSize(300, 360)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -22,7 +19,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setAutoFillBackground(False)
-        self.groupBox.setStyleSheet("color: \'#333A44\';")
+        self.groupBox.setStyleSheet(grey_color)
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -44,35 +41,30 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
         self.btn_login = QtWidgets.QPushButton(self.groupBox)
-        self.btn_login.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                     "padding: 8px;\n"
-                                     "background-color: \'#00C569\'; \n"
-                                     "color: white;\n"
-                                     "border: none;\n"
-                                     "margin: 4px 0;")
+        self.btn_login.setStyleSheet(green_button)
         self.btn_login.setObjectName("btn_login")
+        self.btn_login.setAutoDefault(True)
         self.gridLayout.addWidget(self.btn_login, 5, 0, 1, 1)
         self.inp_email = QtWidgets.QLineEdit(self.groupBox)
-        self.inp_email.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                     "padding: 4px;\n"
-                                     "margin-bottom: 10px;")
+        self.inp_email.setStyleSheet(inp_reset)
         self.inp_email.setObjectName("inp_email")
+        self.inp_email.setFocus()
+        self.inp_email.returnPressed.connect(self.login)
         self.gridLayout.addWidget(self.inp_email, 2, 0, 1, 1)
         self.inp_senha = QtWidgets.QLineEdit(self.groupBox)
-        self.inp_senha.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                     "padding: 4px;\n"
-                                     "margin-bottom: 10px;")
+        self.inp_senha.setStyleSheet(inp_reset)
         self.inp_senha.setEchoMode(QtWidgets.QLineEdit.Password)
         self.inp_senha.setObjectName("inp_senha")
+        self.inp_senha.returnPressed.connect(self.login)
         self.gridLayout.addWidget(self.inp_senha, 4, 0, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout.addItem(spacerItem, 7, 0, 1, 1)
         self.label = QtWidgets.QLabel(self.groupBox)
-        self.label.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label.setStyleSheet(lbl_reset)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_2.setStyleSheet(lbl_reset)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 3, 0, 1, 1)
         self.lbl_messages = QtWidgets.QLabel(self.groupBox)
@@ -112,36 +104,37 @@ class Ui_MainWindow(object):
 
         ###
 
-        self.window = QtWidgets.QMainWindow()
-        self.ui = test.Ui_MainWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
+        # self.window = QtWidgets.QMainWindow()
+        # self.ui = test.Ui_MainWindow()
+        # self.ui.setupUi(self.window)
+        # self.window.show()
 
         ###
         self.action_Exit.triggered.connect(qApp.quit)
         self.action_Register.triggered.connect(self.register_window)
-
         self.btn_login.clicked.connect(self.login)
+
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Bankii - Login"))
         self.groupBox.setTitle(_translate("MainWindow", "Login"))
         self.label_5.setText(_translate("MainWindow", "Login"))
         self.btn_login.setText(_translate("MainWindow", "Login"))
         self.label.setText(_translate("MainWindow", "Email"))
         self.label_2.setText(_translate("MainWindow", "Senha"))
-        self.lbl_messages.setText(_translate("MainWindow", message))
+        self.lbl_messages.setText(_translate("MainWindow", message + ' ' + db_name))
         self.menu_File.setTitle(_translate("MainWindow", "&File"))
         self.action_Register.setText(_translate("MainWindow", "&Register"))
         self.action_Register.setStatusTip(_translate("MainWindow", "Registrar um novo usuário"))
-        self.action_Register.setShortcut(_translate("MainWindow", "Ctrl+N"))
+        self.action_Register.setShortcut(_translate("MainWindow", "Ctrl+R"))
         self.action_Exit.setText(_translate("MainWindow", "&Exit"))
         self.action_Exit.setStatusTip(_translate("MainWindow", "Sair do aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
 
+    '''edited'''
 
-    ###
     def user_register_window(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = RegistroDeClientes.Ui_MainWindow()
@@ -165,26 +158,33 @@ class Ui_MainWindow(object):
         email = self.inp_email.text().strip()
         password = self.inp_senha.text()
 
-        try:
-            login = select_by('users', field='email', value=email)
+        self.inp_email.setStyleSheet(inp_reset)
+        self.inp_senha.setStyleSheet(inp_reset)
+        self.lbl_messages.setStyleSheet(lbl_reset)
+        self.lbl_messages.setText('')
 
-            print(login)
-            if login:
-                self.user_register_window()
-            else:
-                self.lbl_messages.setText('Usuário e/ou senha não encontrados.')
-        except:
-            m = 'Erro ao fazer o login.'
-            print(m)
-            self.lbl_messages.setText(m)
+        if email != '':
 
+            try:
+                login = select_by('users', field='email', value=email)
+                if login:
+                    MainWindow.close()
+                    self.user_register_window()
+                else:
+                    self.inp_email.setStyleSheet(inp_error)
+                    self.inp_senha.setStyleSheet(inp_error)
+                    self.lbl_messages.setText('Usuário e/ou senha não encontrados.')
+            except QSqlError:
+                m = 'Erro ao fazer o login.'
 
-'''
-def closeMyApp_OpenNewApp(self):
-    self.close()
-    self.Open = NewApp.NewApp()
-    self.Open.show()
-'''
+                print(m)
+                self.lbl_messages.setText(m)
+        else:
+            self.lbl_messages.setText('Os campos precisam ser preenchidos.')
+            self.lbl_messages.setStyleSheet(lbl_error)
+            self.inp_email.setStyleSheet(inp_error)
+            self.inp_senha.setStyleSheet(inp_error)
+
 
 if __name__ == "__main__":
     import sys
@@ -195,4 +195,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
