@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtSql import QSqlTableModel
-from PyQt5.QtWidgets import qApp
 from PyQt5.QtCore import Qt
 
 

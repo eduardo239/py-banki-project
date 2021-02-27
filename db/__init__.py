@@ -3,13 +3,12 @@ import sys
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlError
 from PyQt5.QtWidgets import QMessageBox
 
-
 db_name = 'contacts.sqlite'
 
 
 def connection():
     con = QSqlDatabase.addDatabase("QSQLITE")
-    con.setDatabaseName("storage/"+db_name)
+    con.setDatabaseName("storage/" + db_name)
 
     # try to open the connection and handles the possible errors
     if not con.open():
@@ -111,16 +110,16 @@ def update_table(table_name, **kwargs):
 
 
 def select_by(table_name, **kwargs):
-    sql = f"""SELECT name, password, email FROM {table_name} WHERE {kwargs["field"]} = '{kwargs["value"]}';"""
+    sql = f"""SELECT name, email FROM {table_name} WHERE {kwargs["field"]} = '{kwargs["value"]}';"""
     q = QSqlQuery()
     q.exec_(sql)
     print(sql)
 
-    name, password = range(2)
+    name, email = range(2)
     results = []
 
     while q.next():
-        results.append([q.value(name), q.value(password)])
+        results.append([q.value(name), q.value(email)])
 
     return results
 
@@ -163,3 +162,78 @@ def register_client(**kwargs):
     except QSqlError:
         print(QSqlError)
         return
+
+
+'''client login'''
+
+
+def client_login(table_name, **kwargs):
+    sql = f"""SELECT name, email, account_number, account_type FROM {table_name} WHERE {kwargs["field"]} = '{kwargs["value"]}';"""
+    q = QSqlQuery()
+    q.exec_(sql)
+    print(sql)
+
+    name, email, account_number, account_type = range(4)
+    results = []
+
+    while q.next():
+        results.append([q.value(name), q.value(email), q.value(account_number), q.value(account_type)])
+
+    return results
+
+
+def account_client(table_name='clients', **kwargs):
+    sql = f"""SELECT saldo, account_id FROM {table_name} WHERE account_id = '{kwargs["account_id"]}'"""
+    q = QSqlQuery()
+    q.exec_(sql)
+    print(sql)
+
+    saldo, account_id = range(2)
+
+    results = []
+
+    while q.next():
+        results.append([q.value(saldo), q.value(account_id)])
+
+    return results
+
+
+''''
+2007-01-01 10:00:00'
+TABLES - - - - - - -
+
+CREATE TABLE funcionario (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+nome TEXT NOT NULL,
+email TEXT,
+senha TEXT NOT NULL,
+cargo TEXT,
+data_nascimento datetime,
+data_de_registro datetime CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE cliente (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+nome TEXT NOT NULL,
+email TEXT,
+senha TEXT NOT NULL,
+genero TEXT,
+numero_da_conta INTEGER,
+data_nascimento datetime,
+data_de_registro datetime CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE conta (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+numero_da_conta INTEGER,
+agencia TEXT,
+tipo_da_conta TEXT,
+saldo REAL,
+data_de_registro datetime CURRENT_TIMESTAMP,
+FOREIGN KEY(numero_da_conta) REFERENCES cliente(numero_da_conta)
+);
+
+
+'''

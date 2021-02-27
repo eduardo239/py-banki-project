@@ -5,9 +5,6 @@ from ui import ListaDeUsuarios, Sobre
 import main
 
 
-
-
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -22,14 +19,12 @@ class Ui_MainWindow(object):
         font.setFamily("Calibri")
         font.setPointSize(14)
         self.label_10.setFont(font)
-        self.label_10.setStyleSheet("padding: 10px;\n"
-                                    "color: \'#00C569\';\n"
-                                    "")
+        self.label_10.setStyleSheet(lbl_simple)
         self.label_10.setAlignment(QtCore.Qt.AlignCenter)
         self.label_10.setObjectName("label_10")
         self.verticalLayout.addWidget(self.label_10)
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setStyleSheet("color: \'#333A44\';")
+        self.groupBox.setStyleSheet(grey_color)
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.groupBox)
@@ -39,50 +34,42 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_2)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.label = QtWidgets.QLabel(self.groupBox_2)
-        self.label.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label.setStyleSheet(lbl_simple)
         self.label.setObjectName("label")
         self.verticalLayout_3.addWidget(self.label)
         self.inp_nome_completo = QtWidgets.QLineEdit(self.groupBox_2)
-        self.inp_nome_completo.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                             "padding: 4px;\n"
-                                             "margin-bottom: 10px;")
+        self.inp_nome_completo.setStyleSheet(inp_reset)
         self.inp_nome_completo.setObjectName("inp_nome_completo")
         self.inp_nome_completo.setFocus()
         self.verticalLayout_3.addWidget(self.inp_nome_completo)
         self.label_2 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_2.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_2.setStyleSheet(lbl_simple)
         self.label_2.setObjectName("label_2")
         self.verticalLayout_3.addWidget(self.label_2)
         self.inp_data_nascimento = QtWidgets.QDateEdit(self.groupBox_2)
-        self.inp_data_nascimento.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                               "padding: 4px;\n"
-                                               "margin-bottom: 10px;")
+        self.inp_data_nascimento.setStyleSheet(inp_reset)
         self.inp_data_nascimento.setObjectName("inp_data_nascimento")
         self.verticalLayout_3.addWidget(self.inp_data_nascimento)
         self.label_3 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_3.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_3.setStyleSheet(lbl_simple)
         self.label_3.setObjectName("label_3")
         self.verticalLayout_3.addWidget(self.label_3)
         self.inp_email = QtWidgets.QLineEdit(self.groupBox_2)
-        self.inp_email.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                     "padding: 4px;\n"
-                                     "margin-bottom: 10px;")
+        self.inp_email.setStyleSheet(inp_reset)
         self.inp_email.setObjectName("inp_email")
         self.inp_email.setPlaceholderText("email@email.com")
         self.verticalLayout_3.addWidget(self.inp_email)
         self.label_4 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_4.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_4.setStyleSheet(lbl_simple)
         self.label_4.setObjectName("label_4")
         self.verticalLayout_3.addWidget(self.label_4)
         self.inp_telefone = QtWidgets.QLineEdit(self.groupBox_2)
-        self.inp_telefone.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                        "padding: 4px;\n"
-                                        "margin-bottom: 10px;")
+        self.inp_telefone.setStyleSheet(inp_reset)
         self.inp_telefone.setObjectName("inp_telefone")
         self.inp_telefone.setInputMask("(99) 99999-9999")
         self.verticalLayout_3.addWidget(self.inp_telefone)
         self.label_9 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_9.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_9.setStyleSheet(lbl_simple)
         self.label_9.setObjectName("label_9")
         self.verticalLayout_3.addWidget(self.label_9)
         self.groupBox_4 = QtWidgets.QGroupBox(self.groupBox_2)
@@ -110,54 +97,40 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.label_5)
         self.inp_agencia = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_agencia.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                       "padding: 4px;\n"
-                                       "margin-bottom: 10px;")
+        self.inp_agencia.setStyleSheet(inp_reset)
         self.inp_agencia.setObjectName("inp_agencia")
         self.inp_agencia.setInputMask("9999-9")
         self.verticalLayout_2.addWidget(self.inp_agencia)
         self.label_6 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_6.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_6.setStyleSheet(lbl_simple)
         self.label_6.setObjectName("label_6")
         self.verticalLayout_2.addWidget(self.label_6)
         self.inp_numero_conta = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_numero_conta.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                            "padding: 4px;\n"
-                                            "margin-bottom: 10px;")
+        self.inp_numero_conta.setStyleSheet(inp_reset)
         self.inp_numero_conta.setObjectName("inp_numero_conta")
         self.verticalLayout_2.addWidget(self.inp_numero_conta)
         self.label_7 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_7.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_7.setStyleSheet(lbl_simple)
         self.label_7.setObjectName("label_7")
         self.verticalLayout_2.addWidget(self.label_7)
         self.cmb_tipo = QtWidgets.QComboBox(self.groupBox_3)
-        self.cmb_tipo.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                    "padding: 4px;")
+        self.cmb_tipo.setStyleSheet(combo_box)
         self.cmb_tipo.setObjectName("cmb_tipo")
         self.cmb_tipo.addItem("")
         self.cmb_tipo.addItem("")
         self.cmb_tipo.addItem("")
         self.verticalLayout_2.addWidget(self.cmb_tipo)
         self.label_8 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_8.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                   "margin-top: 10px;")
+        self.label_8.setStyleSheet(lbl_simple)
         self.label_8.setObjectName("label_8")
         self.verticalLayout_2.addWidget(self.label_8)
         self.inp_password = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_password.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                        "padding: 4px;\n"
-                                        "margin-bottom: 10px;")
+        self.inp_password.setStyleSheet(inp_reset)
         self.inp_password.setObjectName("inp_password")
         self.inp_password.returnPressed.connect(self.register)
         self.verticalLayout_2.addWidget(self.inp_password)
         self.btn_registrar = QtWidgets.QPushButton(self.groupBox_3)
-        self.btn_registrar.setStyleSheet("font: 10pt \"Calibri\";\n"
-                                         "padding: 8px;\n"
-                                         "background-color: \'#00C569\'; \n"
-                                         "color: white;\n"
-                                         "border: none;\n"
-                                         "margin: 4px 0;")
-        self.btn_registrar.setObjectName("btn_registrar")
+        self.btn_registrar.setStyleSheet(button_green)
         self.btn_registrar.setAutoDefault(True)
         self.verticalLayout_2.addWidget(self.btn_registrar)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -315,6 +288,10 @@ class Ui_MainWindow(object):
         self.window.show()
 
     def register(self):
+        self.lbl_messages.setText('')
+        self.lbl_messages.setStyleSheet(lbl_reset)
+        self.inp_nome_completo.setStyleSheet(inp_reset)
+
         email = self.inp_email.text().strip()
         name = self.inp_nome_completo.text().strip()
         phone = self.inp_telefone.text().strip()
@@ -341,21 +318,17 @@ class Ui_MainWindow(object):
                             account_type=account_type,
                             password=password
                             )
-                self.lbl_messages.setText('')
-                self.inp_nome_completo.setStyleSheet("border: 1px solid inherit;\n"
-                                                     "padding: 4px;\n"
-                                                     "margin-bottom: 10px")
+                self.lbl_messages.setText(user_registered)
+
             except QSqlError:
                 print(QSqlError)
-                m = 'Erro ao registrar um novo usuário.'
+                m = error_register
                 print(m)
                 self.lbl_messages.setText(m)
         else:
-            self.lbl_messages.setText('Os campos estão vazios')
-            self.lbl_messages.setStyleSheet("color: \'#ff0000\';\n"
-                                            "padding: 10px;")
-            self.inp_nome_completo.setStyleSheet("border: 1px solid red;\n"
-                                                 "padding: 4px;")
+            self.lbl_messages.setText(empty_field)
+            self.lbl_messages.setStyleSheet(lbl_error)
+            self.inp_nome_completo.setStyleSheet(inp_error)
 
     def about_window(self):
         self.window = QtWidgets.QMainWindow()

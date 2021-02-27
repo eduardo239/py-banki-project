@@ -6,12 +6,12 @@ from ui import Registro, RegistroDeClientes
 
 con, message = connection()
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(300, 360)
-        MainWindow.setFixedSize(300, 360)
+        MainWindow.resize(300, 400)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -26,21 +26,12 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(10, 10, 10, 10)
         self.gridLayout.setObjectName("gridLayout")
         self.label_5 = QtWidgets.QLabel(self.groupBox)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(18)
-        font.setBold(False)
-        font.setItalic(False)
-        font.setWeight(50)
-        self.label_5.setFont(font)
-        self.label_5.setStyleSheet("padding: 10px;\n"
-                                   "color: \'#00C569\';\n"
-                                   "")
+        self.label_5.setStyleSheet(lbl_title)
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
         self.btn_login = QtWidgets.QPushButton(self.groupBox)
-        self.btn_login.setStyleSheet(green_button)
+        self.btn_login.setStyleSheet(button_green)
         self.btn_login.setObjectName("btn_login")
         self.btn_login.setAutoDefault(True)
         self.gridLayout.addWidget(self.btn_login, 5, 0, 1, 1)
@@ -59,11 +50,11 @@ class Ui_MainWindow(object):
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout.addItem(spacerItem, 7, 0, 1, 1)
         self.label = QtWidgets.QLabel(self.groupBox)
-        self.label.setStyleSheet(lbl_reset)
+        self.label.setStyleSheet(lbl_simple)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.groupBox)
-        self.label_2.setStyleSheet(lbl_reset)
+        self.label_2.setStyleSheet(lbl_simple)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 3, 0, 1, 1)
         self.lbl_messages = QtWidgets.QLabel(self.groupBox)
@@ -157,14 +148,14 @@ class Ui_MainWindow(object):
                 else:
                     self.inp_email.setStyleSheet(inp_error)
                     self.inp_senha.setStyleSheet(inp_error)
-                    self.lbl_messages.setText('Usuário e/ou senha não encontrados.')
+                    self.lbl_messages.setText(not_found)
             except QSqlError:
-                m = 'Erro ao fazer o login.'
+                m = error_login
 
                 print(m)
                 self.lbl_messages.setText(m)
         else:
-            self.lbl_messages.setText('Os campos precisam ser preenchidos.')
+            self.lbl_messages.setText(empty_field)
             self.lbl_messages.setStyleSheet(lbl_error)
             self.inp_email.setStyleSheet(inp_error)
             self.inp_senha.setStyleSheet(inp_error)

@@ -1,5 +1,6 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from ui import Login as Funcionario_Window, Usuario_Login as Usuario_Window, test
+from ui.styles import *
 
 
 class Ui_MainWindow(object):
@@ -16,29 +17,19 @@ class Ui_MainWindow(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label_5 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_5.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_5.setStyleSheet(lbl_simple)
         self.label_5.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.label_5)
         self.btn_usuario = QtWidgets.QPushButton(self.groupBox_3)
-        self.btn_usuario.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 8px;\n"
-"background-color: \'#00C569\'; \n"
-"color: white;\n"
-"border: none;\n"
-"margin: 4px 0;")
+        self.btn_usuario.setStyleSheet(button_green)
         self.btn_usuario.setObjectName("btn_usuario")
         self.verticalLayout_2.addWidget(self.btn_usuario)
         self.label_6 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_6.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_6.setStyleSheet(lbl_simple)
         self.label_6.setObjectName("label_6")
         self.verticalLayout_2.addWidget(self.label_6)
         self.btn_funcionario = QtWidgets.QPushButton(self.groupBox_3)
-        self.btn_funcionario.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 8px;\n"
-"background-color: \'#2E14C4\'; \n"
-"color: white;\n"
-"border: none;\n"
-"margin: 4px 0;")
+        self.btn_funcionario.setStyleSheet(button_green_dark)
         self.btn_funcionario.setObjectName("btn_funcionario")
         self.verticalLayout_2.addWidget(self.btn_funcionario)
         self.verticalLayout.addWidget(self.groupBox_3)
@@ -94,12 +85,14 @@ class Ui_MainWindow(object):
 
         '''edited'''
     def usuario_window(self):
+        MainWindow.close()
         self.window = QtWidgets.QMainWindow()
         self.ui = Usuario_Window.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 
     def funcionario_window(self):
+        MainWindow.close()
         self.window = QtWidgets.QMainWindow()
         self.ui = Funcionario_Window.Ui_MainWindow()
         self.ui.setupUi(self.window)

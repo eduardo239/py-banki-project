@@ -1,14 +1,17 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from ui import Usuario_Login
+from ui.styles import *
+from ui import Transferir, Depositar, Sacar
+from db import account_client
 
 
 class Ui_MainWindow(object):
+    def __init__(self, usuario):
+        self.usuario = usuario
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(675, 444)
 
-        self.usuarioLogin = Usuario_Login.Ui_MainWindow()
-        self.nome_usuario = self.usuarioLogin.usuario
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -25,37 +28,34 @@ class Ui_MainWindow(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label_5 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_5.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_5.setStyleSheet(lbl_simple)
         self.label_5.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.label_5)
         self.inp_agencia = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_agencia.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+        self.inp_agencia.setStyleSheet(inp_disabled)
         self.inp_agencia.setReadOnly(True)
         self.inp_agencia.setObjectName("inp_agencia")
+        self.inp_agencia.setText('AG-9999')
         self.verticalLayout_2.addWidget(self.inp_agencia)
         self.label_6 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_6.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_6.setStyleSheet(lbl_simple)
         self.label_6.setObjectName("label_6")
         self.verticalLayout_2.addWidget(self.label_6)
         self.inp_numero_conta = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_numero_conta.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+        self.inp_numero_conta.setStyleSheet(inp_disabled)
         self.inp_numero_conta.setReadOnly(True)
         self.inp_numero_conta.setObjectName("inp_numero_conta")
+        self.inp_numero_conta.setText(self.usuario['usuario'][2])
         self.verticalLayout_2.addWidget(self.inp_numero_conta)
         self.label_7 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_7.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_7.setStyleSheet(lbl_simple)
         self.label_7.setObjectName("label_7")
         self.verticalLayout_2.addWidget(self.label_7)
         self.inp_tipo_conta = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_tipo_conta.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+        self.inp_tipo_conta.setStyleSheet(inp_disabled)
         self.inp_tipo_conta.setReadOnly(True)
         self.inp_tipo_conta.setObjectName("inp_tipo_conta")
+        self.inp_tipo_conta.setText(self.usuario['usuario'][3])
         self.verticalLayout_2.addWidget(self.inp_tipo_conta)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem)
@@ -77,6 +77,12 @@ class Ui_MainWindow(object):
         self.lbl_nome_usuario.setFont(font)
         self.lbl_nome_usuario.setObjectName("lbl_nome_usuario")
         self.verticalLayout_3.addWidget(self.lbl_nome_usuario)
+        ''''''
+        self.lbl_email = QtWidgets.QLabel(self.groupBox_4)
+        self.lbl_email.setObjectName("lbl_email")
+        self.verticalLayout_3.addWidget(self.lbl_email)
+        self.lbl_email.setText(self.usuario['usuario'][1])
+        ''''''
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.verticalLayout_3.addItem(spacerItem1)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -102,16 +108,16 @@ class Ui_MainWindow(object):
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.label_2 = QtWidgets.QLabel(self.groupBox)
+        self.lbl_saldo = QtWidgets.QLabel(self.groupBox)
         font = QtGui.QFont()
         font.setFamily("Noto Serif")
         font.setPointSize(18)
         font.setBold(True)
         font.setWeight(75)
-        self.label_2.setFont(font)
-        self.label_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout_6.addWidget(self.label_2)
+        self.lbl_saldo.setFont(font)
+        self.lbl_saldo.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbl_saldo.setObjectName("lbl_saldo")
+        self.verticalLayout_6.addWidget(self.lbl_saldo)
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_6.addItem(spacerItem3)
         self.horizontalLayout_2.addWidget(self.groupBox)
@@ -136,12 +142,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.groupBox_2)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.label_3 = QtWidgets.QLabel(self.groupBox_2)
-        font = QtGui.QFont()
-        font.setFamily("Noto Serif")
-        font.setPointSize(18)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_3.setFont(font)
+        self.label_3.setStyleSheet(lbl_title_2)
         self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_3.setObjectName("label_3")
         self.verticalLayout_7.addWidget(self.label_3)
@@ -153,8 +154,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_3, icon2, "")
         self.verticalLayout.addWidget(self.tabWidget)
         self.lbl_mensagem = QtWidgets.QLabel(self.centralwidget)
-        self.lbl_mensagem.setStyleSheet("color: \'#333A44\';\n"
-"padding: 10px;")
+        self.lbl_mensagem.setStyleSheet(lbl_reset)
         self.lbl_mensagem.setObjectName("lbl_mensagem")
         self.verticalLayout.addWidget(self.lbl_mensagem)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -192,7 +192,9 @@ class Ui_MainWindow(object):
 
         '''edited'''
         self.action_Exit.triggered.connect(lambda : MainWindow.close())
-        self.lbl_nome_usuario.setText(self.nome_usuario)
+        self.action_Depositar.triggered.connect(self.deposit)
+        self.action_Sacar.triggered.connect(self.withdraw)
+        self.action_Transferir.triggered.connect(self.transfer)
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
@@ -206,17 +208,18 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Número da Conta"))
         self.label_7.setText(_translate("MainWindow", "Tipo"))
         self.groupBox_4.setTitle(_translate("MainWindow", "Informações da Usuário"))
-        self.lbl_nome_usuario.setText(_translate("MainWindow", "Nome do Usuário"))
+        self.lbl_nome_usuario.setText(_translate("MainWindow", self.usuario['usuario'][0]))
+        # adicionar email
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Início"))
         self.groupBox_5.setTitle(_translate("MainWindow", "Saldo atual"))
         self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
-        self.label_2.setText(_translate("MainWindow", "TextLabel"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Saldo"))
+        self.lbl_saldo.setText(_translate("MainWindow", "TextLabel"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Sa&ldo"))
         self.groupBox_6.setTitle(_translate("MainWindow", "Extrato dos últimos dias"))
         self.groupBox_2.setTitle(_translate("MainWindow", "GroupBox"))
         self.label_3.setText(_translate("MainWindow", "TextLabel"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Extrato"))
-        self.lbl_mensagem.setText(_translate("MainWindow", "TextLabel"))
+        self.lbl_mensagem.setText(_translate("MainWindow", ""))
         self.menu_Arquivo.setTitle(_translate("MainWindow", "&Arquivo"))
         self.menu_Opera_es.setTitle(_translate("MainWindow", "&Operações"))
         self.menuSobre.setTitle(_translate("MainWindow", "Ajuda"))
@@ -230,6 +233,29 @@ class Ui_MainWindow(object):
         self.action_Transferir.setShortcut(_translate("MainWindow", "Ctrl+T"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
 
+    def saldo(self):
+        return account_client('account', account_id=self.usuario['usuario'][2])
+
+    '''def'''
+    def deposit(self):
+        self.data = self.saldo()
+
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Depositar.Ui_MainWindow(self.data)
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def withdraw(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sacar.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def transfer(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Transferir.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 if __name__ == "__main__":
     import sys

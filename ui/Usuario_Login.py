@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from db import *
 from ui import Minha_Conta
+from ui.styles import *
 
 
 class Ui_MainWindow(object):
@@ -26,13 +27,11 @@ class Ui_MainWindow(object):
         self.lbl_nome_usuario.setObjectName("lbl_nome_usuario")
         self.verticalLayout_2.addWidget(self.lbl_nome_usuario)
         self.label_6 = QtWidgets.QLabel(self.groupBox_3)
-        self.label_6.setStyleSheet("font: 10pt \"Calibri\";")
+        self.label_6.setStyleSheet(lbl_simple)
         self.label_6.setObjectName("label_6")
         self.verticalLayout_2.addWidget(self.label_6)
         self.inp_numero_conta = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_numero_conta.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+        self.inp_numero_conta.setStyleSheet(inp_reset)
         self.inp_numero_conta.setReadOnly(False)
         self.inp_numero_conta.setObjectName("inp_numero_conta")
 
@@ -44,9 +43,7 @@ class Ui_MainWindow(object):
         self.label_7.setObjectName("label_7")
         self.verticalLayout_2.addWidget(self.label_7)
         self.inp_senha = QtWidgets.QLineEdit(self.groupBox_3)
-        self.inp_senha.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 4px;\n"
-"margin-bottom: 10px;")
+        self.inp_senha.setStyleSheet(inp_reset)
         self.inp_senha.setEchoMode(QtWidgets.QLineEdit.Password)
         self.inp_senha.setReadOnly(False)
         self.inp_senha.setObjectName("inp_senha")
@@ -54,12 +51,7 @@ class Ui_MainWindow(object):
         self.inp_senha.returnPressed.connect(self.login)
         self.verticalLayout_2.addWidget(self.inp_senha)
         self.btn_entrar = QtWidgets.QPushButton(self.groupBox_3)
-        self.btn_entrar.setStyleSheet("font: 10pt \"Calibri\";\n"
-"padding: 8px;\n"
-"background-color: \'#00C569\'; \n"
-"color: white;\n"
-"border: none;\n"
-"margin: 4px 0;")
+        self.btn_entrar.setStyleSheet(button_green)
         self.btn_entrar.setObjectName("btn_entrar")
 
         self.btn_entrar.setAutoDefault(True)
@@ -68,8 +60,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addItem(spacerItem)
         self.verticalLayout.addWidget(self.groupBox_3)
         self.lbl_mensagem = QtWidgets.QLabel(self.centralwidget)
-        self.lbl_mensagem.setStyleSheet("color: \'#333A44\';\n"
-"padding: 10px;")
+        self.lbl_mensagem.setStyleSheet(lbl_reset)
         self.lbl_mensagem.setObjectName("lbl_mensagem")
         self.verticalLayout.addWidget(self.lbl_mensagem)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -90,7 +81,7 @@ class Ui_MainWindow(object):
         '''edited'''
         self.btn_entrar.clicked.connect(self.login)
         self.action_Exit.triggered.connect(lambda : MainWindow.close())
-        self.usuario = ''
+        self.usuario = {}
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -110,11 +101,15 @@ class Ui_MainWindow(object):
 
     '''def'''
     def my_account_window(self):
+        self.lbl_mensagem.setText('')
+        self.lbl_mensagem.setStyleSheet(lbl_reset)
+        self.inp_numero_conta.setStyleSheet(inp_reset)
+        self.inp_senha.setStyleSheet(inp_reset)
+
         self.window = QtWidgets.QMainWindow()
-        self.ui = Minha_Conta.Ui_MainWindow()
+        self.ui = Minha_Conta.Ui_MainWindow(self.usuario)
         self.ui.setupUi(self.window)
         self.window.show()
-        MainWindow.close()
 
     def login(self):
         conta = self.inp_numero_conta.text().strip()
@@ -122,18 +117,19 @@ class Ui_MainWindow(object):
 
         if conta != '':
             try:
-                resultado = select_by('clients', field='email', value=conta)
-                print('ok')
+                resultado = client_login('clients', field='email', value=conta)
                 if resultado:
-                    print(str(resultado[0][0]))
-                    self.usuario = str(resultado[0][0])
+                    self.usuario = {'usuario': resultado[0]}
                     self.my_account_window()
                 else:
-                    self.lbl_mensagem.setText('Acesso não autorizado')
+                    self.lbl_mensagem.setStyleSheet(lbl_error)
+                    self.inp_numero_conta.setStyleSheet(inp_error)
+                    self.inp_senha.setStyleSheet(inp_error)
+                    self.lbl_mensagem.setText(not_auth)
             except:
-                self.lbl_mensagem.setText('Erro ao fazer o login')
+                self.lbl_mensagem.setText(error_login)
         else:
-            self.lbl_mensagem.setText('Os campos precisam ser preenchidos')
+            self.lbl_mensagem.setText(empty_field)
 
 
 if __name__ == "__main__":
