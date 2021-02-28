@@ -1,0 +1,20 @@
+'''str'''
+        self.action_Exit.triggered.connect(lambda :MainWindow.close())
+        self.btn_registro.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btn_registro.clicked.connect(self.registrar)
+
+
+'''def'''
+    def registrar(self):
+        nome = self.inp_nome.text().strip()
+        email = self.inp_email.text().strip()
+        senha = self.inp_senha.text()
+        genero = 'masculino' if self.rad_masculino.isChecked() else 'feminino'
+        data_nascimento = self.inp_data_nascimento.text()
+        numero_conta = self.inp_numero_conta.text()
+
+        try:
+            registrar_cliente(nome=nome, email=email, senha=senha, genero=genero, data_nascimento=data_nascimento,
+                              numero_da_conta=numero_conta)
+        except:
+            self.lbl_mensagem.setText('RECLI: Erro ao registrar o cliente')

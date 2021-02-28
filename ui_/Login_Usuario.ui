@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>307</width>
-    <height>316</height>
+    <width>322</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,29 +16,38 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="lbl_title">
-      <property name="font">
-       <font>
-        <family>Roboto Mono</family>
-        <pointsize>20</pointsize>
-       </font>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string/>
       </property>
-      <property name="styleSheet">
-       <string notr="true">color: '#00C569'; padding: 4px; margin-bottom: 10px;</string>
-      </property>
-      <property name="text">
-       <string>Main</string>
-      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="lbl_title">
+         <property name="font">
+          <font>
+           <family>Roboto Mono</family>
+           <pointsize>20</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: '#00C569'; padding: 4px; margin-bottom: 10px;</string>
+         </property>
+         <property name="text">
+          <string>Login</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
-       <string>Main</string>
+       <string/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="label_7">
          <property name="font">
           <font>
            <family>Calibri</family>
@@ -49,23 +58,26 @@
           <string notr="true">color: '#333A44';</string>
          </property>
          <property name="text">
-          <string>Registro de Clientes</string>
+          <string>Email/Número da Conta</string>
+         </property>
+         <property name="buddy">
+          <cstring>inp_email_conta</cstring>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_registro_2">
+        <widget class="QLineEdit" name="inp_email_conta">
          <property name="font">
           <font>
            <family>Calibri</family>
-           <pointsize>11</pointsize>
+           <pointsize>10</pointsize>
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true"> padding: 10px; background-color: '#00C569'; border: none; color: '#ffffff';</string>
+          <string notr="true">color: '#333A44'; padding: 4px; margin-bottom: 10px;</string>
          </property>
-         <property name="text">
-          <string>Registro</string>
+         <property name="placeholderText">
+          <string/>
          </property>
         </widget>
        </item>
@@ -81,25 +93,60 @@
           <string notr="true">color: '#333A44';</string>
          </property>
          <property name="text">
-          <string>Registro Funcionários</string>
+          <string>Senha</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_registro">
+        <widget class="QLineEdit" name="inp_senha">
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: '#333A44'; padding: 4px; margin-bottom: 10px;</string>
+         </property>
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_login">
          <property name="font">
           <font>
            <family>Calibri</family>
            <pointsize>11</pointsize>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
-          <string notr="true"> padding: 10px; background-color: '#77a899'; border: none; color: '#ffffff';</string>
+          <string notr="true"> padding: 10px; background-color: '#00C569'; border: none; color: '#ffffff';</string>
          </property>
          <property name="text">
-          <string>Registro</string>
+          <string>Fazer Login</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -114,19 +161,6 @@
       </property>
      </widget>
     </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -135,7 +169,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>307</width>
+     <width>322</width>
      <height>21</height>
     </rect>
    </property>
@@ -143,6 +177,7 @@
     <property name="title">
      <string>&amp;Arquivo</string>
     </property>
+    <addaction name="action_Registrar"/>
     <addaction name="action_Exit"/>
    </widget>
    <widget class="QMenu" name="menuA_juda">
@@ -208,10 +243,19 @@
     <string>&amp;Informações</string>
    </property>
   </action>
+  <action name="action_Registrar">
+   <property name="icon">
+    <iconset>
+     <normaloff>../assets/15586770221582004499-128.png</normaloff>../assets/15586770221582004499-128.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Registrar</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
  </widget>
- <tabstops>
-  <tabstop>btn_registro</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

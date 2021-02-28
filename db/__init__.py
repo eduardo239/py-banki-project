@@ -1,7 +1,10 @@
 import sys
+from datetime import datetime
 
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlError
 from PyQt5.QtWidgets import QMessageBox
+
+from typo import *
 
 db_name = 'contacts.sqlite'
 
@@ -168,7 +171,8 @@ def register_client(**kwargs):
 
 
 def client_login(table_name, **kwargs):
-    sql = f"""SELECT name, email, account_number, account_type FROM {table_name} WHERE {kwargs["field"]} = '{kwargs["value"]}';"""
+    sql = f"""SELECT name, email, account_number, account_type FROM {table_name} 
+    WHERE {kwargs["field"]} = '{kwargs["value"]}';"""
     q = QSqlQuery()
     q.exec_(sql)
     print(sql)
@@ -200,6 +204,7 @@ def account_client(table_name='clients', **kwargs):
 
 ''''
 2007-01-01 10:00:00'
+YYYY-MM-DD HH:MM:SS
 TABLES - - - - - - -
 
 CREATE TABLE funcionario (
@@ -236,4 +241,190 @@ FOREIGN KEY(numero_da_conta) REFERENCES cliente(numero_da_conta)
 );
 
 
+https://realpython.com/python-pyqt-database/#running-sql-queries-with-pyqt
 '''
+
+
+def registrar_funcionario(**kwargs):
+    data_formatada = datetime.strptime(kwargs["data_nascimento"], "%d/%m/%Y")
+
+    try:
+        sql = f"""INSERT INTO funcionario (nome, email, senha, cargo, data_nascimento, data_de_registro) 
+        VALUES(
+        '{kwargs["nome"]}', '{kwargs["email"]}', '{kwargs["senha"]}', '{kwargs["cargo"]}', 
+        '{data_formatada}', '{datetime.now()}'
+        )"""
+
+        q = QSqlQuery()
+        q.exec_(sql)
+        print(sql)
+
+    except QSqlError:
+        print(QSqlError)
+        return
+
+
+def registrar_cliente(**kwargs):
+    data_formatada = datetime.strptime(kwargs["data_nascimento"], "%d/%m/%Y")
+
+    try:
+        sql_cliente = f"""INSERT INTO cliente 
+        (nome, email, senha, genero, numero_da_conta, data_nascimento, data_de_registro) 
+        VALUES
+        ('{kwargs["nome"]}', '{kwargs["email"]}', '{kwargs["senha"]}', '{kwargs["genero"]}', 
+        {kwargs["numero_da_conta"]}, '{data_formatada}', '{datetime.now()}')"""
+
+        q = QSqlQuery()
+        q.exec_(sql_cliente)
+        print(sql_cliente)
+
+        try:
+            sql_conta = f"""INSERT INTO conta
+            (numero_da_conta, agencia, tipo_da_conta, saldo, data_de_registro)
+            VALUES 
+            ({kwargs["numero_da_conta"]}, '{kwargs["agencia"]}', '{kwargs["tipo_da_conta"]}',
+            {kwargs["saldo"]}, '{datetime.now()}');"""
+
+            qc = QSqlQuery()
+            qc.exec_(sql_conta)
+            print(sql_conta)
+
+            print(qc.result().lastError().text())
+
+        except:
+            print(qc.result().lastError().text())
+            print('erro ao cadastrar conta')
+    except QSqlError:
+        print(qc.result().lastError().text())
+        print('erro ao registrar o cliente')
+
+        return
+
+
+def login_funcionario(table_name='funcionario', **kwargs):
+    sql = f"""SELECT nome, email, cargo FROM {table_name} WHERE email = '{kwargs["email"]}'"""
+
+    try:
+        q = QSqlQuery()
+        q.exec_(sql)
+        print(sql)
+
+        if q.first():
+            nome = q.value(0)
+            email = q.value(1)
+            cargo = q.value(3)
+            return [nome, email, cargo]
+        else:
+            return []
+    except:
+        print("BD: erro ao logar com o funcionario")
+
+
+""" - - - - - - - - - - - - - - login cliente - - - - - - - - - - - - - - """
+
+
+def login_cliente(**kwargs):
+    print('- ' * 50)
+    cliente = []
+    conta = []
+    try:
+        cliente = get_cliente(**kwargs)
+        try:
+            conta = get_conta(cliente)
+        except:
+            print(err_conta_nao_encontrada)
+    except:
+        print(err_cliente_nao_encontrado)
+    return cliente + conta
+
+
+def get_cliente(**kwargs):
+    print('- ' * 50)
+    sql = f"""SELECT nome, email, numero_da_conta FROM cliente WHERE email = '{kwargs["email"]}';"""
+
+    try:
+        q_ = QSqlQuery()
+        q_.exec_(sql)
+        print(sql)
+
+        if q_.first():
+            nome = q_.value(0)
+            email = q_.value(1)
+            numero_da_conta = q_.value(2)
+            return [nome, email, numero_da_conta]
+        else:
+            return []
+    except:
+        print(err_cliente_nao_encontrado)
+
+
+def get_conta(cliente):
+    print('- ' * 50)
+    sql = f"""SELECT agencia, tipo_da_conta, saldo FROM conta WHERE numero_da_conta = {int(cliente[2])};"""
+
+    try:
+        q2 = QSqlQuery()
+        q2.exec_(sql)
+        print(sql)
+
+        if q2.first():
+            agencia = q2.value(0)
+            tipo_da_conta = q2.value(1)
+            saldo = q2.value(2)
+            return [agencia, tipo_da_conta, saldo]
+        else:
+            return []
+    except:
+        print(err_conta_nao_encontrada)
+
+
+def depositar(numero_da_conta, valor_atual):
+    print('- ' * 50)
+    sql_depositar = f"""UPDATE conta SET saldo = {float(valor_atual)} WHERE numero_da_conta = {int(numero_da_conta)}"""
+
+    try:
+        q = QSqlQuery()
+        q.exec_(sql_depositar)
+        print(sql_depositar)
+    except:
+        print(err_deposito)
+
+
+def sacar(numero_da_conta, valor_atual):
+    print('- ' * 50)
+    sql_saque = f"""UPDATE conta SET saldo = {float(valor_atual)} WHERE numero_da_conta = {int(numero_da_conta)}"""
+
+    try:
+        q = QSqlQuery()
+        q.exec_(sql_saque)
+        print(sql_saque)
+    except:
+        print(err_sacar)
+
+
+def transferir(numero_conta_envia, numero_conta_recebe, valor_envia=0,  valor_recebe=0):
+    print('- ' * 50)
+    try:
+        sacar(numero_conta_envia, valor_envia)
+        try:
+            depositar(numero_conta_recebe, valor_recebe)
+        except:
+            print(err_depositar_transferencia)
+    except:
+        print(err_sacar_transferencia)
+
+
+def get_saldo(numero_da_conta):
+    print('- ' * 50)
+    sql = f"""SELECT saldo FROM conta WHERE numero_da_conta = {numero_da_conta};"""
+
+    try:
+        q_ = QSqlQuery()
+        q_.exec_(sql)
+        print(sql)
+
+        if q_.first():
+            saldo = q_.value(0)
+            return saldo
+    except:
+        print(err_buscar_saldo)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>697</width>
-    <height>454</height>
+    <width>1000</width>
+    <height>534</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string/>
+          <string>Dados Pessoais</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -209,13 +209,13 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string/>
+          <string>Dados da Conta</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="label_8">
             <property name="font">
              <font>
               <family>Calibri</family>
@@ -226,40 +226,27 @@
              <string notr="true">color: '#333A44';</string>
             </property>
             <property name="text">
-             <string>Gênero</string>
+             <string>Agência</string>
             </property>
             <property name="buddy">
-             <cstring>radioButton</cstring>
+             <cstring>inp_nome</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBox_3">
+           <widget class="QLineEdit" name="inp_agencia">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">color: '#333A44';</string>
+             <string notr="true">color: '#333A44'; padding: 4px; margin-bottom: 10px;</string>
             </property>
-            <property name="title">
-             <string/>
+            <property name="placeholderText">
+             <string>0000-0</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QRadioButton" name="radioButton">
-               <property name="text">
-                <string>Masculino</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButton_2">
-               <property name="text">
-                <string>Feminino</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </widget>
           </item>
           <item>
@@ -277,12 +264,12 @@
              <string>Número da Conta</string>
             </property>
             <property name="buddy">
-             <cstring>inp_cargo_2</cstring>
+             <cstring>inp_numero_conta</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="inp_cargo_2">
+           <widget class="QLineEdit" name="inp_numero_conta">
             <property name="font">
              <font>
               <family>Calibri</family>
@@ -295,6 +282,193 @@
             <property name="placeholderText">
              <string>00000</string>
             </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: '#333A44';</string>
+            </property>
+            <property name="text">
+             <string>Tipo da Conta</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cmb_tipo">
+            <property name="styleSheet">
+             <string notr="true">QComboBox {
+padding: 6px;
+}</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Corrente</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Poupança</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Salário</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Simples</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: '#333A44'; margin-top: 10px;</string>
+            </property>
+            <property name="text">
+             <string>Saldo</string>
+            </property>
+            <property name="buddy">
+             <cstring>inp_saldo</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="inp_saldo">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: '#333A44'; padding: 4px; margin-bottom: 10px;</string>
+            </property>
+            <property name="inputMask">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>R$ 00.00</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: '#333A44';</string>
+            </property>
+            <property name="text">
+             <string>Data de Registro</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: '#333A44'; padding: 8px;</string>
+            </property>
+            <property name="text">
+             <string>dd/mm/YYYY</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Informações adicionais</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: '#333A44';</string>
+            </property>
+            <property name="text">
+             <string>Gênero</string>
+            </property>
+            <property name="buddy">
+             <cstring>rad_masculino</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="styleSheet">
+             <string notr="true">color: '#333A44';</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QRadioButton" name="rad_masculino">
+               <property name="text">
+                <string>Masculino</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="rad_feminino">
+               <property name="text">
+                <string>Feminino</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
@@ -331,6 +505,9 @@
               <pointsize>11</pointsize>
              </font>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true"> padding: 10px; background-color: '#00C569'; border: none; color: '#ffffff';</string>
             </property>
@@ -338,6 +515,19 @@
              <string>Registrar Cliente</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <spacer name="verticalSpacer">
@@ -375,7 +565,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>697</width>
+     <width>1000</width>
      <height>21</height>
     </rect>
    </property>
@@ -464,9 +654,12 @@
   <tabstop>inp_email</tabstop>
   <tabstop>inp_senha</tabstop>
   <tabstop>inp_senha_novamente</tabstop>
-  <tabstop>radioButton</tabstop>
-  <tabstop>radioButton_2</tabstop>
-  <tabstop>inp_cargo_2</tabstop>
+  <tabstop>inp_agencia</tabstop>
+  <tabstop>inp_numero_conta</tabstop>
+  <tabstop>cmb_tipo</tabstop>
+  <tabstop>inp_saldo</tabstop>
+  <tabstop>rad_masculino</tabstop>
+  <tabstop>rad_feminino</tabstop>
   <tabstop>inp_data_nascimento</tabstop>
   <tabstop>btn_registro</tabstop>
  </tabstops>
