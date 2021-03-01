@@ -13,8 +13,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1000, 534)
-
         MainWindow.setStyleSheet(window)
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -255,7 +255,8 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "Senha Novamente"))
         self.groupBox_4.setTitle(_translate("MainWindow", "Dados da Conta"))
         self.label_8.setText(_translate("MainWindow", "Agência"))
-        self.inp_agencia.setPlaceholderText(_translate("MainWindow", "0000-0"))
+        self.inp_agencia.setPlaceholderText(_translate("MainWindow", "AG-0000"))
+        self.inp_agencia.setText(_translate("MainWindow", "AG-"))
         self.label_7.setText(_translate("MainWindow", "Número da Conta"))
         self.inp_numero_conta.setPlaceholderText(_translate("MainWindow", "00000"))
         self.label_9.setText(_translate("MainWindow", "Tipo da Conta"))

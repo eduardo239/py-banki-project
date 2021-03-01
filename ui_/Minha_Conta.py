@@ -1,6 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QRegExp
+from PyQt5.QtCore import QRegExp, Qt
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QRegExpValidator
+from PyQt5.QtSql import QSqlTableModel, QSqlQueryModel
+from ui_.TableModel import TableModel
+import locale
 
 from db import *
 from typo import *
@@ -10,6 +13,12 @@ from style import *
 class Ui_MainWindow(object):
     def __init__(self, usuario):
         self.usuario = usuario
+        self.nome_do_cliente = str(self.usuario[0]).title()
+        self.email_do_cliente = self.usuario[1]
+        self.numero_da_conta = int(self.usuario[2])
+        self.agencia_do_cliente = self.usuario[3]
+        self.tipo_da_conta_do_cliente = self.usuario[4]
+        self.saldo_do_cliente = self.usuario[5]
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -42,7 +51,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.lbl_meu_nome)
         self.verticalLayout.addWidget(self.groupBox)
         self.tab_minha_conta = QtWidgets.QTabWidget(self.centralwidget)
-        self.tab_minha_conta.setStyleSheet("")
+        self.tab_minha_conta.setStyleSheet(tab_default)
         self.tab_minha_conta.setIconSize(QtCore.QSize(16, 16))
         self.tab_minha_conta.setObjectName("tab_minha_conta")
         self.tab = QtWidgets.QWidget()
@@ -118,8 +127,11 @@ class Ui_MainWindow(object):
         self.label_7.setStyleSheet("color: \'#333A44\'; padding: 16px 0;")
         self.label_7.setObjectName("label_7")
         self.verticalLayout_9.addWidget(self.label_7)
+
+        '''extrato'''
         self.tab_extrato = QtWidgets.QTableView(self.tab_2)
         self.tab_extrato.setObjectName("tab_extrato")
+
         self.verticalLayout_9.addWidget(self.tab_extrato)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("./assets/9104314201582004494-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -361,24 +373,25 @@ class Ui_MainWindow(object):
         self.label_22.setBuddy(self.inp_agencia)
 
         '''var'''
+        self.extrato = extrato(self.usuario[2])
+
+
+        '''atr'''
         self.action_Exit.triggered.connect(lambda : MainWindow.close())
         self.btn_sacar.clicked.connect(self.sacar_)
         self.btn_transferir.clicked.connect(self.transferir)
         self.btn_depositar.clicked.connect(self.depositar)
 
-        self.nome_cliente = str(self.usuario[0]).title()
-        self.email_cliente = self.usuario[1]
-        self.numero_conta = self.usuario[2]
+        # self.nome_cliente = str(self.usuario[0]).title()
+        self.inp_agencia.setText(self.agencia_do_cliente)
+        self.inp_tipo_conta.setText(self.tipo_da_conta_do_cliente)
 
         self.inp_numero_conta.setEnabled(False)
         self.inp_agencia.setEnabled(False)
         self.inp_tipo_conta.setEnabled(False)
-        self.saldo = self.usuario[5]
-        self.inp_agencia.setText(self.usuario[3])
-        self.inp_numero_conta.setText(str(self.numero_conta))
-        self.inp_tipo_conta.setText(self.usuario[4])
+        self.inp_numero_conta.setText(str(self.numero_da_conta))
 
-
+        ''''''
         self.retranslateUi(MainWindow)
         self.tab_minha_conta.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -387,12 +400,12 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.lbl_title.setText(_translate("MainWindow", "Minha Conta"))
-        self.lbl_meu_nome.setText(_translate("MainWindow", self.nome_cliente))
+        self.lbl_meu_nome.setText(_translate("MainWindow", self.nome_do_cliente))
         self.label_2.setText(_translate("MainWindow", "Agência"))
         self.label_3.setText(_translate("MainWindow", "Número da Conta"))
         self.label_4.setText(_translate("MainWindow", "Tipo da Conta"))
         self.label_5.setText(_translate("MainWindow", "Saldo Atual"))
-        self.lbl_saldo_atual.setText(_translate("MainWindow", str(self.saldo)))
+        self.lbl_saldo_atual.setText(_translate("MainWindow", ""))
         self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab), _translate("MainWindow", "Home"))
         self.label_7.setText(_translate("MainWindow", "Sacar"))
         self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab_2), _translate("MainWindow", "Extrato"))
@@ -427,10 +440,12 @@ class Ui_MainWindow(object):
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
         self.action_Informa_es.setText(_translate("MainWindow", "&Informações"))
 
+        self.atualiza_mensagem(self.saldo_do_cliente)
+
     '''def'''
     def sacar_(self):
         valor = self.inp_valor_s.text()
-        numero_conta = int(self.inp_numero_conta.text())
+        numero_conta = int(self.numero_da_conta)
 
         try:
             saldo_anterior = get_saldo(numero_conta)
@@ -439,17 +454,15 @@ class Ui_MainWindow(object):
 
             self.label_18.setText(sacar_ok)
         except:
-            print(sacar_fail)
+            self.lbl_mensagem.setText(sacar_fail)
         finally:
             saldo = get_saldo(numero_conta)
             self.inp_valor_d.setText('')
-            self.lbl_saldo_atual.setText(str(saldo))
-            self.lbl_mensagem.setText(f"Saldo atual: {saldo}")
-            self.label_19.setText(f"Saldo atual: {saldo}")
+            self.atualiza_mensagem(saldo)
 
     def depositar(self):
         valor = self.inp_valor_d.text()
-        numero_conta = int(self.inp_numero_conta.text())
+        numero_conta = self.numero_da_conta
 
         try:
             saldo_atual = get_saldo(numero_conta)
@@ -459,17 +472,15 @@ class Ui_MainWindow(object):
 
             self.label_19.setText(depositar_ok)
         except:
-            print(depositar_fail)
             self.lbl_mensagem.setText(depositar_fail)
         finally:
             saldo = get_saldo(numero_conta)
             self.inp_valor_s.setText('')
-            self.lbl_saldo_atual.setText(str(saldo))
-            self.lbl_mensagem.setText(f"Saldo atual {saldo}")
+            self.atualiza_mensagem(saldo)
 
     def transferir(self):
         valor = float(self.inp_valor_t.text())
-        conta_envia = int(self.inp_numero_conta.text())
+        conta_envia = int(self.numero_da_conta)
         conta_recebe = int(self.inp_numero_conta_t.text())
 
         try:
@@ -483,15 +494,20 @@ class Ui_MainWindow(object):
                        saldo_antes_recebe, saldo_atual_recebe, valor)
 
             self.lbl_mensagem.setText(transferir_ok)
-            print(transferir_ok)
         except:
-            print(transferir_fail)
             self.lbl_mensagem.setText(transferir_fail)
         finally:
             saldo = get_saldo(conta_envia)
             self.inp_valor_s.setText('')
-            self.lbl_saldo_atual.setText(str(saldo))
-            self.lbl_mensagem.setText(f"Saldo atual {saldo}")
+            self.atualiza_mensagem(saldo)
+
+
+    def atualiza_mensagem(self, valor):
+        self.lbl_saldo_atual.setText("${:,.2f}".format(valor))
+        self.lbl_mensagem.setText("${:,.2f}".format(valor))
+        self.label_19.setText("${:,.2f}".format(valor))
+        self.label_18.setText("${:,.2f}".format(valor))
+
 
 
 if __name__ == "__main__":

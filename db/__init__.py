@@ -292,10 +292,10 @@ def registrar_cliente(**kwargs):
 
             print(qc.result().lastError().text())
 
-        except:
+        except QSqlError as qc:
             print(qc.result().lastError().text())
             print('erro ao cadastrar conta')
-    except QSqlError:
+    except QSqlError as qc:
         print(qc.result().lastError().text())
         print('erro ao registrar o cliente')
 
@@ -303,8 +303,8 @@ def registrar_cliente(**kwargs):
 """ - - - - - - - - - - - - - - login - - - - - - - - - - - - - - """
 
 
-def login_funcionario(table_name='funcionario', **kwargs):
-    sql = f"""SELECT nome, email, cargo FROM {table_name} WHERE email = '{kwargs["email"]}'"""
+def login_funcionario(**kwargs):
+    sql = f"""SELECT nome, email, cargo FROM funcionario WHERE email = '{kwargs["email"]}'"""
 
     try:
         q = QSqlQuery()
@@ -514,6 +514,24 @@ def transferir(conta_envia, saldo_antes_envia, saldo_atual_envia, conta_recebe,
         print(err_sacar_transferencia)
 
 
+def extrato(numero_conta):
+    sql = f"""SELECT saldo_anterior, saldo_atual, valor, operacao, data FROM historico_conta
+        WHERE numero_da_conta = {numero_conta}"""
+    lista = []
+
+    q = QSqlQuery()
+    q.exec_(sql)
+    print(sql)
+
+    while q.next():
+        saldo_anterior = q.value(0)
+        saldo_atual = q.value(1)
+        valor = q.value(2)
+        operacao = q.value(3)
+        data = q.value(4)
+        lista.append([saldo_anterior, saldo_atual, valor, operacao, data])
+
+    return lista
 '''
 return -1
 '''

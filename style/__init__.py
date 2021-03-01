@@ -35,4 +35,11 @@ group_default = "QGroupBox { background-color: white; border-color: red; }"
 color_grey = "color: '#333A44'; "
 
 # window
-window = "background-color: white; "
+window = "QMenuBar { background-color: white; color: '#333A44'; box-shadow: 1px 1px 1px rgba(255, 0, 0, 0.5); }" \
+         "QMenuBar::item {background-color: white; padding: 6px 12px; }" \
+         "QMenuBar::item::selected {background: '#00C569'; color: white; }"\
+         "QMenu {color: '#333A44'; background-color: white; }" \
+         "QMenu::item { padding: 6px 12px; min-width: 100px; }" \
+         "QMenu::item::selected { color: '#333A44'; background: '#C8FCCF';}"
+
+tab_default = ""

@@ -1,6 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from db import login_funcionario
 from style import *
+from typo import *
+from ui_ import Lista_Usuarios
 
 
 class Ui_MainWindow(object):
@@ -103,6 +106,12 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuA_juda.menuAction())
         self.label_7.setBuddy(self.inp_email)
 
+        '''atr'''
+        self.btn_login.clicked.connect(self.login)
+        self.btn_login.setAutoDefault(True)
+        self.inp_senha.returnPressed.connect(self.login)
+        self.inp_email.returnPressed.connect(self.login)
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -129,6 +138,21 @@ class Ui_MainWindow(object):
         self.action_Registrar.setText(_translate("MainWindow", "&Registrar"))
         self.action_Registrar.setShortcut(_translate("MainWindow", "Ctrl+R"))
 
+    def funcionario_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Lista_Usuarios.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def login(self):
+        email = self.inp_email.text()
+        senha = self.inp_senha.text()
+
+        try:
+            login_funcionario(email=email, senha=senha)
+            self.funcionario_window()
+        except:
+            self.lbl_mensagem.setText(err_login_generico)
 
 if __name__ == "__main__":
     import sys
