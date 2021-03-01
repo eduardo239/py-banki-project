@@ -5,6 +5,7 @@ err_registro_generico = 'Erro ao fazer o registro.'
 
 """success"""
 suc_login = 'Usuário logado.'
+suc_registro_cliente = 'Cliente registrado com sucesso.'
 
 """conta"""
 sacar_ok = 'Saque efetuado com sucesso.'
@@ -23,6 +24,7 @@ err_sacar = 'Erro ao sacar.'
 err_depositar_transferencia = 'Erro ao depositar na transferência.'
 err_sacar_transferencia = 'Erro ao sacar na transferência.'
 err_buscar_saldo = 'Erro ao buscar o saldo.'
+err_logger = 'Erro ao gerar o log.'
 """label"""
 
 
