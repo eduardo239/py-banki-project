@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from db import *
-from ui_ import Minha_Conta
+from ui_ import Minha_Conta, Registro_Cliente
 from typo import *
 from style import *
 
@@ -74,16 +74,19 @@ class Ui_MainWindow(object):
         self.menuA_juda = QtWidgets.QMenu(self.menubar)
         self.menuA_juda.setObjectName("menuA_juda")
         MainWindow.setMenuBar(self.menubar)
+
         self.action_Registro_Funcionario = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../assets/1388560951582004484-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("./assets/15808962761582004492-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Registro_Funcionario.setIcon(icon)
         self.action_Registro_Funcionario.setObjectName("action_Registro_Funcionario")
+
         self.action_Exit = QtWidgets.QAction(MainWindow)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("./assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Exit.setIcon(icon1)
         self.action_Exit.setObjectName("action_Exit")
+
         self.actionSobre = QtWidgets.QAction(MainWindow)
         self.actionSobre.setObjectName("actionSobre")
         self.actionContato = QtWidgets.QAction(MainWindow)
@@ -108,11 +111,12 @@ class Ui_MainWindow(object):
         '''var'''
         self.dados_usuario = ''
         self.btn_login.clicked.connect(self.login)
+        self.action_Registrar.triggered.connect(self.registrar)
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
         self.inp_email_conta.returnPressed.connect(self.login)
         self.inp_senha.returnPressed.connect(self.login)
         self.btn_login.setAutoDefault(True)
-        self.inp_email_conta.setText("email")
+        self.inp_email_conta.setText("nome@")
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -163,9 +167,16 @@ class Ui_MainWindow(object):
             self.minha_conta()
             self.lbl_mensagem.setText(suc_login)
             self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
-        except:
+        except Exception as e:
+            print(e)
             self.lbl_mensagem.setText(err_usuario_nao_encontrado)
             self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+
+    def registrar(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Registro_Cliente.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 
 if __name__ == "__main__":

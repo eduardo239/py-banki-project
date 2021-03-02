@@ -1,13 +1,25 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QRegExp, Qt
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QRegExpValidator
-from PyQt5.QtSql import QSqlTableModel, QSqlQueryModel
-from ui_.TableModel import TableModel
-import locale
+from PyQt5.QtCore import QRegExp
+from PyQt5.QtGui import QRegExpValidator
+from PyQt5.QtSql import QSqlTableModel
 
 from db import *
 from typo import *
 from style import *
+
+
+def box_mensagem_ok(tipo):
+    msg = QMessageBox()
+    msg.setWindowTitle('Sucesso')
+    msg.setIcon(QMessageBox.Information)
+
+    if tipo == 'depositar':
+        msg.setText(suc_deposito)
+    elif tipo == 'sacar':
+        msg.setText(suc_saque)
+    elif tipo == 'transferir':
+        msg.setText(suc_transferencia)
+    msg.exec_()
 
 
 class Ui_MainWindow(object):
@@ -46,7 +58,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.lbl_title)
         self.lbl_meu_nome = QtWidgets.QLabel(self.groupBox)
         self.lbl_meu_nome.setStyleSheet(lbl_small_grey)
-        self.lbl_meu_nome.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lbl_meu_nome.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lbl_meu_nome.setObjectName("lbl_meu_nome")
         self.horizontalLayout.addWidget(self.lbl_meu_nome)
         self.verticalLayout.addWidget(self.groupBox)
@@ -128,9 +140,16 @@ class Ui_MainWindow(object):
         self.label_7.setObjectName("label_7")
         self.verticalLayout_9.addWidget(self.label_7)
 
-        '''extrato'''
+        '''tab extrato'''
+        self.model = QSqlTableModel()
+        self.model.setTable('historico')
+        self.model.select()
+
         self.tab_extrato = QtWidgets.QTableView(self.tab_2)
         self.tab_extrato.setObjectName("tab_extrato")
+        self.tab_extrato.setModel(self.model)
+        self.tab_extrato.hideColumn(0)
+
 
         self.verticalLayout_9.addWidget(self.tab_extrato)
         icon1 = QtGui.QIcon()
@@ -291,11 +310,11 @@ class Ui_MainWindow(object):
         self.label_22.setStyleSheet(lbl_small_grey)
         self.label_22.setObjectName("label_22")
         self.verticalLayout_4.addWidget(self.label_22)
-        self.inp_nome_cliente_s = QtWidgets.QLineEdit(self.groupBox_9)
-        self.inp_nome_cliente_s.setStyleSheet(inp_default)
-        self.inp_nome_cliente_s.setPlaceholderText("")
-        self.inp_nome_cliente_s.setObjectName("inp_nome_cliente_s")
-        self.verticalLayout_4.addWidget(self.inp_nome_cliente_s)
+        self.inp_numero_conta_s = QtWidgets.QLineEdit(self.groupBox_9)
+        self.inp_numero_conta_s.setStyleSheet(inp_default)
+        self.inp_numero_conta_s.setPlaceholderText("")
+        self.inp_numero_conta_s.setObjectName("inp_numero_conta_s")
+        self.verticalLayout_4.addWidget(self.inp_numero_conta_s)
         self.btn_sacar = QtWidgets.QPushButton(self.groupBox_9)
         self.btn_sacar.setStyleSheet(btn_green)
         self.btn_sacar.setObjectName("btn_sacar")
@@ -338,27 +357,35 @@ class Ui_MainWindow(object):
         self.menuA_juda = QtWidgets.QMenu(self.menubar)
         self.menuA_juda.setObjectName("menuA_juda")
         MainWindow.setMenuBar(self.menubar)
+
         self.action_Registro_Funcionario = QtWidgets.QAction(MainWindow)
         self.action_Registro_Funcionario.setIcon(icon)
         self.action_Registro_Funcionario.setObjectName("action_Registro_Funcionario")
+
         self.action_Exit = QtWidgets.QAction(MainWindow)
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap("./assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Exit.setIcon(icon5)
         self.action_Exit.setObjectName("action_Exit")
+
         self.actionSobre = QtWidgets.QAction(MainWindow)
         self.actionSobre.setObjectName("actionSobre")
+
         self.actionContato = QtWidgets.QAction(MainWindow)
         self.actionContato.setObjectName("actionContato")
+
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
         self.action_Visualizar.setObjectName("action_Visualizar")
+
         self.action_Informa_es = QtWidgets.QAction(MainWindow)
         self.action_Informa_es.setObjectName("action_Informa_es")
+
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
         self.menuA_juda.addAction(self.actionContato)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
         self.menubar.addAction(self.menuA_juda.menuAction())
+
         self.label_2.setBuddy(self.inp_agencia)
         self.label_3.setBuddy(self.inp_agencia)
         self.label_4.setBuddy(self.inp_agencia)
@@ -372,17 +399,35 @@ class Ui_MainWindow(object):
         self.label_21.setBuddy(self.inp_agencia)
         self.label_22.setBuddy(self.inp_agencia)
 
-        '''var'''
-        self.extrato = extrato(self.usuario[2])
+        '''str'''
+
+
+        self.extrato = extrato(self.numero_da_conta)
+
 
 
         '''atr'''
-        self.action_Exit.triggered.connect(lambda : MainWindow.close())
-        self.btn_sacar.clicked.connect(self.sacar_)
-        self.btn_transferir.clicked.connect(self.transferir)
-        self.btn_depositar.clicked.connect(self.depositar)
+        self.action_Exit.triggered.connect(lambda: MainWindow.close())
 
-        # self.nome_cliente = str(self.usuario[0]).title()
+        self.btn_sacar.clicked.connect(self.sacar_)
+        self.btn_sacar.setAutoDefault(True)
+        self.btn_transferir.clicked.connect(self.transferir)
+        self.btn_transferir.setAutoDefault(True)
+        self.btn_depositar.clicked.connect(self.depositar)
+        self.btn_depositar.setAutoDefault(True)
+
+        self.inp_numero_conta_t.returnPressed.connect(self.transferir)
+        self.inp_agencia_t.returnPressed.connect(self.transferir)
+        self.inp_tipo_conta_t.returnPressed.connect(self.transferir)
+        self.inp_valor_t.returnPressed.connect(self.transferir)
+        self.inp_nome_cliente_t.returnPressed.connect(self.transferir)
+
+        self.inp_valor_d.returnPressed.connect(self.depositar)
+        self.inp_numero_conta_d.returnPressed.connect(self.depositar)
+
+        self.inp_valor_s.returnPressed.connect(self.sacar_)
+        self.inp_numero_conta_s.returnPressed.connect(self.sacar_)
+
         self.inp_agencia.setText(self.agencia_do_cliente)
         self.inp_tipo_conta.setText(self.tipo_da_conta_do_cliente)
 
@@ -420,7 +465,8 @@ class Ui_MainWindow(object):
         self.label_16.setText(_translate("MainWindow", "Valor"))
         self.label_17.setText(_translate("MainWindow", "Nome do Cliente"))
         self.btn_transferir.setText(_translate("MainWindow", "Transferir"))
-        self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab_4), _translate("MainWindow", "Transferir"))
+        self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab_4),
+                                        _translate("MainWindow", "Transferir"))
         self.label_21.setText(_translate("MainWindow", "Valor"))
         self.label_22.setText(_translate("MainWindow", "Número da Conta"))
         self.btn_sacar.setText(_translate("MainWindow", "Sacar"))
@@ -443,9 +489,13 @@ class Ui_MainWindow(object):
         self.atualiza_mensagem(self.saldo_do_cliente)
 
     '''def'''
+
     def sacar_(self):
-        valor = self.inp_valor_s.text()
         numero_conta = int(self.numero_da_conta)
+        if self.inp_valor_s.text() != '':
+            valor = self.inp_valor_s.text()
+        else:
+            valor = 0
 
         try:
             saldo_anterior = get_saldo(numero_conta)
@@ -453,7 +503,11 @@ class Ui_MainWindow(object):
             sacar(numero_conta, saldo_anterior, valor, saldo_atual)
 
             self.label_18.setText(sacar_ok)
-        except:
+            box_mensagem_ok('sacar')
+        except Exception as e:
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.showMessage(str(e))
+            error_dialog.exec_()
             self.lbl_mensagem.setText(sacar_fail)
         finally:
             saldo = get_saldo(numero_conta)
@@ -465,14 +519,18 @@ class Ui_MainWindow(object):
         numero_conta = self.numero_da_conta
 
         try:
-            saldo_atual = get_saldo(numero_conta)
-            valor_atual = float(saldo_atual) + float(valor)
+            saldo_anterior = get_saldo(numero_conta)
+            saldo_atual = float(saldo_anterior) + float(valor)
 
-            depositar(numero_conta, valor_atual, valor, saldo_atual)
+            depositar(numero_conta, saldo_atual, valor, saldo_anterior)
 
             self.label_19.setText(depositar_ok)
-        except:
-            self.lbl_mensagem.setText(depositar_fail)
+            box_mensagem_ok('depositar')
+        except Exception as e:
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.showMessage(str(e))
+            error_dialog.exec_()
+            self.lbl_mensagem.setText(sacar_fail)
         finally:
             saldo = get_saldo(numero_conta)
             self.inp_valor_s.setText('')
@@ -494,24 +552,27 @@ class Ui_MainWindow(object):
                        saldo_antes_recebe, saldo_atual_recebe, valor)
 
             self.lbl_mensagem.setText(transferir_ok)
-        except:
-            self.lbl_mensagem.setText(transferir_fail)
+            box_mensagem_ok('transferir')
+        except Exception as e:
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.showMessage(str(e))
+            error_dialog.exec_()
+            self.lbl_mensagem.setText(sacar_fail)
         finally:
             saldo = get_saldo(conta_envia)
             self.inp_valor_s.setText('')
             self.atualiza_mensagem(saldo)
 
-
     def atualiza_mensagem(self, valor):
         self.lbl_saldo_atual.setText("${:,.2f}".format(valor))
         self.lbl_mensagem.setText("${:,.2f}".format(valor))
-        self.label_19.setText("${:,.2f}".format(valor))
-        self.label_18.setText("${:,.2f}".format(valor))
-
+        self.label_19.setText("Saldo atual ${:,.2f}".format(valor))
+        self.label_18.setText("Saldo atual ${:,.2f}".format(valor))
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

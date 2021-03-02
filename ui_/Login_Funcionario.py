@@ -151,8 +151,10 @@ class Ui_MainWindow(object):
         try:
             login_funcionario(email=email, senha=senha)
             self.funcionario_window()
-        except:
+        except Exception as e:
+            print(e)
             self.lbl_mensagem.setText(err_login_generico)
+
 
 if __name__ == "__main__":
     import sys

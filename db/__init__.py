@@ -34,11 +34,11 @@ def create_table(table_name, **kwargs):
         password VARCHAR(46) NOT NULL
         )"""
 
-    sql2 = f"""CREATE TABLE IF NOT EXISTS clients (
+    sql2 = f"""CREATE TABLE IF NOT EXISTS cliente (
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
         name VARCHAR(46) NOT NULL,
-        email VARCHAR(46) NOT NULL,
-        gender VARCHAR(15),
+        email VARCHAR(46) NOT NULL UNIQUE,
+        gender VARCHAR(10),
         account_number VARCHAR(12) NOT NULL UNIQUE,
         account_type VARCHAR(3) NOT NULL,
         password VARCHAR(46) NOT NULL
@@ -210,34 +210,45 @@ TABLES - - - - - - -
 CREATE TABLE funcionario (
 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
 nome TEXT NOT NULL,
-email TEXT,
+email TEXT UNIQUE,
 senha TEXT NOT NULL,
 cargo TEXT,
-data_nascimento datetime,
-data_de_registro datetime CURRENT_TIMESTAMP
+data_nascimento TEXT,
+data_registro TEXT
 );
-
 
 CREATE TABLE cliente (
 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
 nome TEXT NOT NULL,
-email TEXT,
+email TEXT UNIQUE NOT NULL,
 senha TEXT NOT NULL,
 genero TEXT,
-numero_da_conta INTEGER,
-data_nascimento datetime,
-data_de_registro datetime CURRENT_TIMESTAMP
+numero_conta INTEGER,
+data_nascimento TEXT,
+data_registro TEXT
 );
-
 
 CREATE TABLE conta (
 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-numero_da_conta INTEGER,
+numero_conta INTEGER UNIQUE,
 agencia TEXT,
-tipo_da_conta TEXT,
+tipo_conta TEXT,
 saldo REAL,
-data_de_registro datetime CURRENT_TIMESTAMP,
-FOREIGN KEY(numero_da_conta) REFERENCES cliente(numero_da_conta)
+data_registro TEXT,
+FOREIGN KEY(numero_conta) REFERENCES cliente(numero_conta)
+);
+
+
+CREATE TABLE historico (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+numero_conta INTEGER,
+conta_recebe INTEGER,
+saldo_anterior TEXT,
+saldo_atual TEXT,
+valor REAL,
+operacao TEXT,
+data TEXT,
+FOREIGN KEY(numero_conta) REFERENCES cliente(numero_conta)
 );
 
 
@@ -250,7 +261,7 @@ def registrar_funcionario(**kwargs):
     data_formatada = datetime.strptime(kwargs["data_nascimento"], "%d/%m/%Y")
 
     try:
-        sql = f"""INSERT INTO funcionario (nome, email, senha, cargo, data_nascimento, data_de_registro) 
+        sql = f"""INSERT INTO funcionario (nome, email, senha, cargo, data_nascimento, data_registro) 
         VALUES(
         '{kwargs["nome"]}', '{kwargs["email"]}', '{kwargs["senha"]}', '{kwargs["cargo"]}', 
         '{data_formatada}', '{datetime.now()}'
@@ -260,8 +271,8 @@ def registrar_funcionario(**kwargs):
         q.exec_(sql)
         print(sql)
 
-    except QSqlError:
-        print(QSqlError)
+    except Exception as e:
+        print(e)
         return
 
 
@@ -270,7 +281,7 @@ def registrar_cliente(**kwargs):
 
     try:
         sql_cliente = f"""INSERT INTO cliente 
-        (nome, email, senha, genero, numero_da_conta, data_nascimento, data_de_registro) 
+        (nome, email, senha, genero, numero_conta, data_nascimento, data_registro) 
         VALUES
         ('{kwargs["nome"]}', '{kwargs["email"]}', '{kwargs["senha"]}', '{kwargs["genero"]}', 
         {kwargs["numero_da_conta"]}, '{data_formatada}', '{datetime.now()}')"""
@@ -281,7 +292,7 @@ def registrar_cliente(**kwargs):
 
         try:
             sql_conta = f"""INSERT INTO conta
-            (numero_da_conta, agencia, tipo_da_conta, saldo, data_de_registro)
+            (numero_conta, agencia, tipo_conta, saldo, data_registro)
             VALUES 
             ({kwargs["numero_da_conta"]}, '{kwargs["agencia"]}', '{kwargs["tipo_da_conta"]}',
             {kwargs["saldo"]}, '{datetime.now()}');"""
@@ -345,7 +356,7 @@ def login_cliente(**kwargs):
 
 def get_cliente(**kwargs):
     print('- ' * 50)
-    sql = f"""SELECT nome, email, numero_da_conta FROM cliente WHERE email = '{kwargs["email"]}';"""
+    sql = f"""SELECT nome, email, numero_conta FROM cliente WHERE email = '{kwargs["email"]}';"""
 
     try:
         q_ = QSqlQuery()
@@ -366,7 +377,7 @@ def get_cliente(**kwargs):
 
 def get_conta(cliente):
     print('- ' * 50)
-    sql = f"""SELECT agencia, tipo_da_conta, saldo FROM conta WHERE numero_da_conta = {int(cliente[2])};"""
+    sql = f"""SELECT agencia, tipo_conta, saldo FROM conta WHERE numero_conta = {int(cliente[2])};"""
 
     try:
         q2 = QSqlQuery()
@@ -387,7 +398,7 @@ def get_conta(cliente):
 
 def get_saldo(numero_da_conta):
     print('- ' * 50)
-    sql = f"""SELECT saldo FROM conta WHERE numero_da_conta = {numero_da_conta};"""
+    sql = f"""SELECT saldo FROM conta WHERE numero_conta = {numero_da_conta};"""
 
     try:
         q_ = QSqlQuery()
@@ -413,13 +424,12 @@ def logger(tipo, **kwargs):
         saldo_anterior = float(kwargs['saldo_anterior'])
         data = datetime.now()
 
-        if tipo != 'transferir':
-            sql = f"""INSERT INTO historico_conta (numero_da_conta, saldo_anterior, saldo_atual, valor, operacao, data)
-            VALUES ({numero_conta}, {saldo_anterior}, {saldo_atual}, {valor} , 'depositar', '{str(data)}' )"""
+        sql = f"""INSERT INTO historico (numero_conta, saldo_anterior, saldo_atual, valor, operacao, data)
+        VALUES ({numero_conta}, {saldo_anterior}, {saldo_atual}, {valor} , 'depositar', '{str(data)}' )"""
 
-            q = QSqlQuery()
-            q.exec_(sql)
-            print(sql)
+        q = QSqlQuery()
+        q.exec_(sql)
+        print(sql)
 
     def log_sacar():
         numero_conta = int(kwargs['numero_da_conta'])
@@ -428,26 +438,24 @@ def logger(tipo, **kwargs):
         saldo_anterior = float(kwargs['saldo_anterior'])
         data = datetime.now()
 
-        if tipo != 'transferir':
-            sql = f"""INSERT INTO historico_conta (numero_da_conta, saldo_anterior, saldo_atual, valor, operacao, data)
-                    VALUES ({numero_conta}, {saldo_anterior}, {saldo_atual}, {valor} , 'sacar', '{data}' )"""
+        sql = f"""INSERT INTO historico (numero_conta, saldo_anterior, saldo_atual, valor, operacao, data)
+                VALUES ({numero_conta}, {saldo_anterior}, {saldo_atual}, {valor} , 'sacar', '{data}' )"""
 
-            q = QSqlQuery()
-            q.exec_(sql)
-            print(sql)
+        q = QSqlQuery()
+        q.exec_(sql)
+        print(sql)
 
     def log_transferir():
         conta_envia = kwargs['conta_envia']
-        saldo_antes_envia = kwargs['saldo_antes_envia']
+        saldo_anterior_envia = kwargs['saldo_antes_envia']
         saldo_atual_envia = kwargs['saldo_atual_envia']
         valor = kwargs['valor']
-        numero_conta_receber = kwargs['conta_recebe']
+        conta_recebe = kwargs['conta_recebe']
         data = datetime.now()
-        print(conta_envia, saldo_antes_envia, saldo_atual_envia, valor, numero_conta_receber)
 
-        sql = f"""INSERT INTO historico_conta 
-        (numero_da_conta, saldo_anterior, saldo_atual, valor, numero_conta_receber, operacao, data)
-        VALUES ({conta_envia}, {saldo_antes_envia}, {saldo_atual_envia}, {valor}, {numero_conta_receber}, 
+        sql = f"""INSERT INTO historico 
+        (numero_conta, conta_recebe, saldo_anterior, saldo_atual, valor, operacao, data)
+        VALUES ({conta_envia}, {conta_recebe}, {saldo_anterior_envia}, {saldo_atual_envia}, {valor}, 
         'transferir', '{data}' )"""
 
         q = QSqlQuery()
@@ -464,10 +472,9 @@ def logger(tipo, **kwargs):
         print('Opção não encontrada.')
 
 
-def depositar(conta, saldo_anterior, valor, saldo_atual):
+def depositar(conta, saldo_atual, valor, saldo_anterior):
     print('- ' * 50)
-    sql_depositar = f"""UPDATE conta SET saldo = {float(saldo_anterior)} 
-    WHERE numero_da_conta = {int(conta)}"""
+    sql_depositar = f"""UPDATE conta SET saldo = {float(saldo_atual)} WHERE numero_conta = {int(conta)}"""
 
     try:
         q = QSqlQuery()
@@ -475,14 +482,13 @@ def depositar(conta, saldo_anterior, valor, saldo_atual):
         print(sql_depositar)
         logger('depositar', numero_da_conta=conta, saldo_anterior=saldo_anterior,
                valor=valor, saldo_atual=saldo_atual)
-    except QSqlError as qc:
-        print(qc.result().lastError().text())
-        print(err_deposito)
+    except Exception as e:
+        print(e)
 
 
 def sacar(conta, saldo_anterior, valor, saldo_atual):
     print('- ' * 50)
-    sql_saque = f"""UPDATE conta SET saldo = {float(saldo_atual)} WHERE numero_da_conta = {int(conta)}"""
+    sql_saque = f"""UPDATE conta SET saldo = {float(saldo_atual)} WHERE numero_conta = {int(conta)}"""
 
     try:
         q = QSqlQuery()
@@ -501,10 +507,10 @@ def transferir(conta_envia, saldo_antes_envia, saldo_atual_envia, conta_recebe,
     try:
         sacar(conta_envia, saldo_antes_envia, valor, saldo_atual_envia)
         try:
-            depositar(conta_recebe, saldo_antes_recebe, valor, saldo_atual_recebe)
+            depositar(conta_recebe, saldo_atual_recebe, valor, saldo_antes_recebe)
 
             logger('transferir', conta_envia=conta_envia, saldo_antes_envia=saldo_antes_envia,
-                    saldo_atual_envia=saldo_atual_envia, valor=valor, conta_recebe=conta_recebe)
+                   saldo_atual_envia=saldo_atual_envia, valor=valor, conta_recebe=conta_recebe)
 
         except QSqlError as qc:
             print(qc.result().lastError().text())
@@ -516,7 +522,7 @@ def transferir(conta_envia, saldo_antes_envia, saldo_atual_envia, conta_recebe,
 
 def extrato(numero_conta):
     sql = f"""SELECT saldo_anterior, saldo_atual, valor, operacao, data FROM historico_conta
-        WHERE numero_da_conta = {numero_conta}"""
+        WHERE numero_conta = {numero_conta}"""
     lista = []
 
     q = QSqlQuery()
@@ -532,6 +538,8 @@ def extrato(numero_conta):
         lista.append([saldo_anterior, saldo_atual, valor, operacao, data])
 
     return lista
+
+
 '''
 return -1
 '''

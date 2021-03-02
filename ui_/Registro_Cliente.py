@@ -5,8 +5,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 
 from db import registrar_cliente
+from helpers import box_mensagem_fail, box_mensagem_ok
 from style import *
 from typo import *
+from ui_ import Registro_Funcionario
 
 
 class Ui_MainWindow(object):
@@ -223,10 +225,11 @@ class Ui_MainWindow(object):
 
         '''str'''
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
+        self.action_Registro_Funcionario.triggered.connect(self.registro_funcionario_window)
         self.btn_registro.setCursor(QCursor(Qt.PointingHandCursor))
         self.btn_registro.clicked.connect(self.registrar)
-        self.data_agora = str(datetime.now())
         self.btn_registro.setAutoDefault(True)
+        self.data_agora = str(datetime.now())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -305,6 +308,10 @@ class Ui_MainWindow(object):
         tipo = self.cmb_tipo.currentText()
         saldo = self.inp_saldo.text()
 
+        if nome == '' or email == '' or senha == '' or numero_conta == '' or agencia == '':
+            box_mensagem_fail('vazio')
+            return self.lbl_mensagem.setText(err_campos_vazios)
+
         try:
             registrar_cliente(nome=nome, email=email, senha=senha, genero=genero,
                               data_nascimento=data_nascimento,
@@ -312,9 +319,21 @@ class Ui_MainWindow(object):
                               tipo_da_conta=tipo, saldo=saldo)
             self.lbl_mensagem.setText(suc_registro_cliente)
             self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
-        except:
+            box_mensagem_ok('registrar')
+        except Exception as e:
+            print(e)
             self.lbl_mensagem.setText(err_registro_generico)
             self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+
+    def registro_funcionario_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Registro_Funcionario.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        try:
+            MainWindow.close()
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":

@@ -2,10 +2,14 @@ err_usuario_nao_encontrado = 'Usuário não encontrado.'
 err_login_incorreto = 'Usuário e/ou senha incorretos.'
 err_login_generico = 'Erro ao fazer o login.'
 err_registro_generico = 'Erro ao fazer o registro.'
+err_campos_vazios = 'Os campos precisam ser preenchidos'
 
 """success"""
 suc_login = 'Usuário logado.'
 suc_registro_cliente = 'Cliente registrado com sucesso.'
+suc_deposito = 'Deposito realizado com sucesso.'
+suc_saque = 'Saque realizado com sucesso.'
+suc_transferencia = 'Transferência realizada com sucesso.'
 
 """conta"""
 sacar_ok = 'Saque efetuado com sucesso.'

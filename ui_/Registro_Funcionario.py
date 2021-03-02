@@ -189,7 +189,8 @@ class Ui_MainWindow(object):
         try:
             registrar_funcionario(nome=nome, email=email, senha=senha, cargo=cargo, data_nascimento=data_nascimento)
             self.lbl_mensagem.setText('Funcinário registrado.')
-        except:
+        except Exception as e:
+            print(e)
             print('Erro ao registrar o funcionário')
 
 

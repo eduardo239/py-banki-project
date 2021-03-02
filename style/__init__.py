@@ -25,7 +25,8 @@ inp_data = "QDateEdit { padding: 6px; color: '#333A44'; font: 10pt 'Calibri'; " 
 # combo
 cmb_default = "QComboBox { padding: 6px; color: '#333A44'; font: 10pt 'Calibri'; " \
               "border: 2px solid #eeeeee; }" \
-              "QComboBox::down-arrow { border: none }" \
+              "QComboBox::down-arrow { color: black; }" \
+              "QComboBox::item { padding: 10px; }" \
               "QComboBox:focus { border: 2px solid #006080; }"
 
 # group box
