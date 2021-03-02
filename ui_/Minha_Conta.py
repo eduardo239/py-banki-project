@@ -150,7 +150,6 @@ class Ui_MainWindow(object):
         self.tab_extrato.setModel(self.model)
         self.tab_extrato.hideColumn(0)
 
-
         self.verticalLayout_9.addWidget(self.tab_extrato)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("./assets/9104314201582004494-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -401,10 +400,7 @@ class Ui_MainWindow(object):
 
         '''str'''
 
-
         self.extrato = extrato(self.numero_da_conta)
-
-
 
         '''atr'''
         self.action_Exit.triggered.connect(lambda: MainWindow.close())

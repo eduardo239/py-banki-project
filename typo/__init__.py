@@ -7,6 +7,7 @@ err_campos_vazios = 'Os campos precisam ser preenchidos'
 """success"""
 suc_login = 'Usuário logado.'
 suc_registro_cliente = 'Cliente registrado com sucesso.'
+suc_registro_funcionario = 'Funcionário registrado com sucesso.'
 suc_deposito = 'Deposito realizado com sucesso.'
 suc_saque = 'Saque realizado com sucesso.'
 suc_transferencia = 'Transferência realizada com sucesso.'

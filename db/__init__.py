@@ -253,6 +253,49 @@ FOREIGN KEY(numero_conta) REFERENCES cliente(numero_conta)
 
 
 https://realpython.com/python-pyqt-database/#running-sql-queries-with-pyqt
+
+CREATE TABLE cliente (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+nome TEXT NOT NULL,
+email TEXT UNIQUE NOT NULL,
+senha TEXT NOT NULL,
+genero TEXT,
+numero_conta INTEGER UNIQUE,
+data_nascimento TEXT,
+data_registro TEXT
+);
+
+CREATE TABLE conta (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+numero_conta INTEGER UNIQUE,
+agencia TEXT,
+tipo_conta TEXT,
+saldo REAL DEFAULT 0,
+data_registro TEXT,
+FOREIGN KEY(numero_conta) REFERENCES cliente(numero_conta)
+);
+
+CREATE TABLE historico (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+numero_conta INTEGER,
+conta_recebe INTEGER,
+saldo_anterior TEXT,
+saldo_atual TEXT,
+valor REAL,
+operacao TEXT,
+data TEXT,
+FOREIGN KEY(numero_conta) REFERENCES cliente(numero_conta)
+);
+
+CREATE TABLE funcionario (
+id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+nome TEXT NOT NULL,
+email TEXT UNIQUE NOT NULL,
+senha TEXT NOT NULL,
+cargo TEXT,
+data_nascimento	TEXT,
+data_registro	TEXT
+);
 '''
 """ - - - - - - - - - - - - - - registro - - - - - - - - - - - - - - """
 
@@ -267,13 +310,20 @@ def registrar_funcionario(**kwargs):
         '{data_formatada}', '{datetime.now()}'
         )"""
 
-        q = QSqlQuery()
-        q.exec_(sql)
-        print(sql)
+        try:
+            q = QSqlQuery()
+            q.exec_(sql)
+            print(sql)
 
-    except Exception as e:
-        print(e)
-        return
+            if q.result().lastError().text():
+                mensagem = q.result().lastError().text()
+                return False, mensagem
+            else:
+                return True, ''
+        except QSqlError as qc:
+            print(qc.result().lastError().text())
+    except QSqlError as qc:
+        print(qc.result().lastError().text())
 
 
 def registrar_cliente(**kwargs):
@@ -290,7 +340,11 @@ def registrar_cliente(**kwargs):
         q.exec_(sql_cliente)
         print(sql_cliente)
 
-        try:
+        mensagem = q.result().lastError().text()
+        if mensagem:
+            print(q.result().lastError().text())
+            return False, mensagem
+        else:
             sql_conta = f"""INSERT INTO conta
             (numero_conta, agencia, tipo_conta, saldo, data_registro)
             VALUES 
@@ -301,11 +355,14 @@ def registrar_cliente(**kwargs):
             qc.exec_(sql_conta)
             print(sql_conta)
 
-            print(qc.result().lastError().text())
+            mensagem = qc.result().lastError().text()
+            if not mensagem:
+                return True, mensagem
+            else:
+                print(qc.result().lastError().text())
+                print(2)
+                return False, ''
 
-        except QSqlError as qc:
-            print(qc.result().lastError().text())
-            print('erro ao cadastrar conta')
     except QSqlError as qc:
         print(qc.result().lastError().text())
         print('erro ao registrar o cliente')

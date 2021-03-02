@@ -2,8 +2,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 
+from ui_ import Login_Funcionario, Login_Usuario
 from db import registrar_funcionario
+from helpers import box_mensagem_ok, box_mensagem_fail
 from style import *
+from typo import *
 
 
 class Ui_MainWindow(object):
@@ -113,12 +116,12 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.action_Login = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../assets/1388560951582004484-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("./assets/1388560951582004484-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Login.setIcon(icon)
         self.action_Login.setObjectName("action_Login")
         self.action_Exit = QtWidgets.QAction(MainWindow)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("./assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Exit.setIcon(icon1)
         self.action_Exit.setObjectName("action_Exit")
         self.actionSobre = QtWidgets.QAction(MainWindow)
@@ -138,10 +141,16 @@ class Ui_MainWindow(object):
         self.label_6.setBuddy(self.inp_cargo)
         self.label_4.setBuddy(self.inp_data_nascimento)
 
-        '''var'''
+        '''atr'''
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
         self.btn_registro.clicked.connect(self.registrar)
         self.btn_registro.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btn_registro.setAutoDefault(True)
+        self.inp_cargo.returnPressed.connect(self.registrar)
+        self.inp_nome.returnPressed.connect(self.registrar)
+        self.inp_senha.returnPressed.connect(self.registrar)
+        self.inp_email.returnPressed.connect(self.registrar)
+        self.action_Login.triggered.connect(self.login)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -176,9 +185,11 @@ class Ui_MainWindow(object):
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
         self.actionContato.setText(_translate("MainWindow", "Contato"))
 
-    '''def'''
+    '''met'''
 
     def registrar(self):
+        self.lbl_mensagem.setText('')
+
         nome = self.inp_nome.text().strip()
         email = self.inp_email.text().strip()
         senha = self.inp_senha.text()
@@ -186,13 +197,28 @@ class Ui_MainWindow(object):
         cargo = self.inp_cargo.text().strip()
         data_nascimento = self.inp_data_nascimento.text()
 
-        try:
-            registrar_funcionario(nome=nome, email=email, senha=senha, cargo=cargo, data_nascimento=data_nascimento)
-            self.lbl_mensagem.setText('Funcinário registrado.')
-        except Exception as e:
-            print(e)
-            print('Erro ao registrar o funcionário')
+        if nome != '' or email != '' or senha != '':
+            ok, mensagem = registrar_funcionario(nome=nome, email=email, senha=senha, cargo=cargo,
+                                       data_nascimento=data_nascimento)
 
+
+            if ok:
+                self.lbl_mensagem.setText(suc_registro_funcionario)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
+                box_mensagem_ok('registrar')
+            else:
+                self.lbl_mensagem.setText(mensagem)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+        else:
+            box_mensagem_fail('vazio')
+            self.lbl_mensagem.setText(err_campos_vazios)
+            self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+
+    def login(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Login_Funcionario.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 if __name__ == "__main__":
     import sys

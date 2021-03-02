@@ -1,4 +1,5 @@
 from _datetime import datetime
+import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
@@ -310,30 +311,33 @@ class Ui_MainWindow(object):
 
         if nome == '' or email == '' or senha == '' or numero_conta == '' or agencia == '':
             box_mensagem_fail('vazio')
-            return self.lbl_mensagem.setText(err_campos_vazios)
+            self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+            self.lbl_mensagem.setText(err_campos_vazios)
+            return
 
         try:
-            registrar_cliente(nome=nome, email=email, senha=senha, genero=genero,
+            ok, mensagem = registrar_cliente(nome=nome, email=email, senha=senha, genero=genero,
                               data_nascimento=data_nascimento,
                               numero_da_conta=numero_conta, agencia=agencia,
                               tipo_da_conta=tipo, saldo=saldo)
-            self.lbl_mensagem.setText(suc_registro_cliente)
-            self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
-            box_mensagem_ok('registrar')
+
+            if ok:
+                self.lbl_mensagem.setText(suc_registro_cliente)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
+                box_mensagem_ok('registrar')
+            else:
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+                self.lbl_mensagem.setText(mensagem)
         except Exception as e:
             print(e)
-            self.lbl_mensagem.setText(err_registro_generico)
             self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+            self.lbl_mensagem.setText(err_registro_generico)
 
     def registro_funcionario_window(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Registro_Funcionario.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
-        try:
-            MainWindow.close()
-        except Exception as e:
-            print(e)
 
 
 if __name__ == "__main__":
