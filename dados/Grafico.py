@@ -3,33 +3,40 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.dates as mdates
+# from matplotlib import dates
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 matplotlib.use('Qt5Agg')
 
 from PyQt5 import QtCore, QtWidgets
-
 from db import extrato
 
-dados, lista = extrato(102)
-
-lst_datasx = []
-lst_valores = []
-
-for i in lista:
-    d = datetime.strptime(i[1], "%Y-%m-%d %H:%M:%S.%f")
-    r = datetime.strftime(d, "%Y-%m-%d")
-    lst_datasx.append(r)
-for x in lista: lst_valores.append(x[0])
 
 class Canvas(FigureCanvas):
-    def __init__(self, parent):
-        fig, self.ax = plt.subplots(figsize=(6, 4), dpi=100)
-        fig.autofmt_xdate()
-        self.ax.plot(lst_datasx, lst_valores)
+    def __init__(self, parent, u):
+        self.dados, self.lista = extrato(u)
+        dados, lista = self.gerar()
+        fig, self.ax = plt.subplots(figsize=(6, 5), dpi=100)
+        fig.autofmt_xdate(rotation=30)
+        # self.dd = self.gerar()
+        # self.ax.xaxis.set_major_locator(dates.HourLocator(interval=6))
+        self.ax.plot(dados, lista)
         super().__init__(fig)
+
         self.ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
-        self.ax.set(xlabel='time s', ylabel='voltage', title='Title')
+        self.ax.set_xlabel('X axis', fontsize=8)
+        self.ax.xaxis.get_label().set_fontsize(7)
         self.ax.grid()
+
+    def gerar(self):
+        lst_datas = []
+        lst_valores = []
+
+        for i in self.lista:
+            d = datetime.strptime(i[1], "%Y-%m-%d %H:%M:%S.%f")
+            r = datetime.strftime(d, "%Y-%m-%d %H:%M")
+            lst_datas.append(r)
+        for x in self.lista: lst_valores.append(x[0])
+        return lst_datas, lst_valores
 
 
 class Ui_MainWindow(object):
@@ -39,6 +46,8 @@ class Ui_MainWindow(object):
 
         self.lst_data = []
         self.lst_valores = []
+
+        print(self.usuario)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -55,7 +64,7 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
 
-        self.chart = Canvas(self)
+        self.chart = Canvas(self, self.usuario[2])
 
         self.verticalLayout_2.addWidget(self.chart)
 
@@ -87,6 +96,10 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "TextLabel"))
         self.menu_Arquivo.setTitle(_translate("MainWindow", "&Arquivo"))
         self.action_Exit.setText(_translate("MainWindow", "&Exit"))
+
+    def gerar_lista(self):
+        print(1)
+        return 1
 
 
 if __name__ == "__main__":
