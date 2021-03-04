@@ -9,7 +9,7 @@ from db import registrar_cliente
 from helpers import box_mensagem_fail, box_mensagem_ok
 from style import *
 from typo import *
-from ui_ import Registro_Funcionario
+from ui_ import Registro_Funcionario, Lista_Usuarios, Dados, Sobre
 
 
 class Ui_MainWindow(object):
@@ -189,18 +189,18 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.action_Registro_Funcionario = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../assets/1388560951582004484-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("./assets/1388560951582004484-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Registro_Funcionario.setIcon(icon)
         self.action_Registro_Funcionario.setObjectName("action_Registro_Funcionario")
         self.action_Exit = QtWidgets.QAction(MainWindow)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("./assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Exit.setIcon(icon1)
         self.action_Exit.setObjectName("action_Exit")
         self.actionSobre = QtWidgets.QAction(MainWindow)
         self.actionSobre.setObjectName("actionSobre")
-        self.actionContato = QtWidgets.QAction(MainWindow)
-        self.actionContato.setObjectName("actionContato")
+        # self.actionContato = QtWidgets.QAction(MainWindow)
+        # self.actionContato.setObjectName("actionContato")
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
         self.action_Visualizar.setObjectName("action_Visualizar")
         self.action_Informa_es = QtWidgets.QAction(MainWindow)
@@ -208,7 +208,7 @@ class Ui_MainWindow(object):
         self.menu_Arquivo.addAction(self.action_Registro_Funcionario)
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        self.menuA_juda.addAction(self.actionContato)
+        # self.menuA_juda.addAction(self.actionContato)
         self.menu_Lista_de_Clientes.addAction(self.action_Visualizar)
         self.menu_Lista_de_Clientes.addAction(self.action_Informa_es)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
@@ -227,6 +227,9 @@ class Ui_MainWindow(object):
         '''str'''
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
         self.action_Registro_Funcionario.triggered.connect(self.registro_funcionario_window)
+        self.action_Visualizar.triggered.connect(self.lista_usuarios_window)
+        self.action_Informa_es.triggered.connect(self.dados_window)
+        self.actionSobre.triggered.connect(self.sobre_window)
         self.btn_registro.setCursor(QCursor(Qt.PointingHandCursor))
         self.btn_registro.clicked.connect(self.registrar)
         self.btn_registro.setAutoDefault(True)
@@ -288,10 +291,10 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        self.actionContato.setText(_translate("MainWindow", "Contato"))
+        # self.actionContato.setText(_translate("MainWindow", "Contato"))
         self.action_Visualizar.setText(_translate("MainWindow", "&Visualizar"))
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
-        self.action_Informa_es.setText(_translate("MainWindow", "&Informações"))
+        self.action_Informa_es.setText(_translate("MainWindow", "&Dados"))
 
     '''def'''
 
@@ -317,9 +320,9 @@ class Ui_MainWindow(object):
 
         try:
             ok, mensagem = registrar_cliente(nome=nome, email=email, senha=senha, genero=genero,
-                              data_nascimento=data_nascimento,
-                              numero_da_conta=numero_conta, agencia=agencia,
-                              tipo_da_conta=tipo, saldo=saldo)
+                                             data_nascimento=data_nascimento,
+                                             numero_da_conta=numero_conta, agencia=agencia,
+                                             tipo_da_conta=tipo, saldo=saldo)
 
             if ok:
                 self.lbl_mensagem.setText(suc_registro_cliente)
@@ -336,6 +339,24 @@ class Ui_MainWindow(object):
     def registro_funcionario_window(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Registro_Funcionario.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def lista_usuarios_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Lista_Usuarios.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def dados_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Dados.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def sobre_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sobre.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 

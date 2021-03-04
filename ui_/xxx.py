@@ -72,34 +72,70 @@ return int
 '''
 
 
-def sockMerchant(n, ar):
-    pears = 0
-    color = set()
-    for i in range(len(ar)):
-        if ar[i] not in color:
-            color.add(ar[i])
-        else:
-            pears += 1
-            color.remove(ar[i])
-    return pears
+# def sockMerchant(n, ar):
+#     pears = 0
+#     color = set()
+#     for i in range(len(ar)):
+#         if ar[i] not in color:
+#             color.add(ar[i])
+#         else:
+#             pears += 1
+#             color.remove(ar[i])
+#     return pears
+#
+#
+# sockMerchant(7, [1, 2, 1, 2, 1, 2, 3])
+#
+# def countingValleys(steps, path):
+#     level = 0
+#     valley = 0
+#     for i in range(steps):
+#         if path[i] == 'U':
+#             level += 1
+#         else:
+#             level -= 1
+#
+#         if level == 0 and path[i] == 'U':
+#             valley += 1
+#
+#     return valley
+#
+# print('- - -')
+# a = countingValleys(10, 'DUDDDUUDUU')
+# print(a)
 
 
-sockMerchant(7, [1, 2, 1, 2, 1, 2, 3])
+def jumpingOnClouds(c):
+    """
+    player jump 1 or 2 clouds
+    avoid c[i] = 1
+    minimum number of jumps
+    c = array [01]
+    return minimum number of jumps
+    """
+    i = 0
+    steps = 0
+    diff = 0
+    r = len(c)
+    while i < r:
+        print(c[i])
+        try:
+            a, b = c[i+1], c[i+2]
+            if a == 1:
+                steps += 1
+            elif a == 0 and b == 1:
+                steps += 1
+            elif a == 0 and b == 0:
+                steps += 1
+                diff += 1
+                r -= 1
+        except IndexError:
+            pass
 
-def countingValleys(steps, path):
-    level = 0
-    valley = 0
-    for i in range(steps):
-        if path[i] == 'U':
-            level += 1
-        else:
-            level -= 1
+        i += 1
+    return steps - diff
 
-        if level == 0 and path[i] == 'U':
-            valley += 1
 
-    return valley
-
-print('- - -')
-a = countingValleys(10, 'DUDDDUUDUU')
+a = jumpingOnClouds([0, 0, 0, 1, 0, 0])
 print(a)
+

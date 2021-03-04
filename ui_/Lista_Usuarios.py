@@ -4,6 +4,7 @@ from PyQt5.QtSql import QSqlTableModel
 
 from typo import *
 from style import *
+from ui_ import Sobre
 
 
 class Ui_MainWindow(object):
@@ -93,9 +94,10 @@ class Ui_MainWindow(object):
         self.model.setHeaderData(6, Qt.Horizontal, "Data de Registro")
         self.model.select()
 
-
         '''table'''
         self.tab_lista_usuarios = QtWidgets.QTableView(self.groupBox_3)
+        self.tab_lista_usuarios.resizeColumnsToContents()
+        self.tab_lista_usuarios.resizeRowsToContents()
         self.tab_lista_usuarios.setObjectName("tab_lista_usuarios")
         self.tab_lista_usuarios.setModel(self.model)
         self.tab_lista_usuarios.resizeColumnsToContents()
@@ -123,35 +125,39 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.action_Registro_Funcionario = QtWidgets.QAction(MainWindow)
+        # self.action_Registro_Funcionario = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../assets/1388560951582004484-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.action_Registro_Funcionario.setIcon(icon)
-        self.action_Registro_Funcionario.setObjectName("action_Registro_Funcionario")
+        icon.addPixmap(QtGui.QPixmap("./assets/1388560951582004484-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.action_Registro_Funcionario.setIcon(icon)
+        # self.action_Registro_Funcionario.setObjectName("action_Registro_Funcionario")
         self.action_Exit = QtWidgets.QAction(MainWindow)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("./assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Exit.setIcon(icon1)
         self.action_Exit.setObjectName("action_Exit")
         self.actionSobre = QtWidgets.QAction(MainWindow)
         self.actionSobre.setObjectName("actionSobre")
-        self.actionContato = QtWidgets.QAction(MainWindow)
-        self.actionContato.setObjectName("actionContato")
+        # self.actionContato = QtWidgets.QAction(MainWindow)
+        # self.actionContato.setObjectName("actionContato")
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
         self.action_Visualizar.setObjectName("action_Visualizar")
-        self.action_Informa_es = QtWidgets.QAction(MainWindow)
-        self.action_Informa_es.setObjectName("action_Informa_es")
-        self.menu_Arquivo.addAction(self.action_Registro_Funcionario)
+        # self.action_Informa_es = QtWidgets.QAction(MainWindow)
+        # self.action_Informa_es.setObjectName("action_Informa_es")
+        # self.menu_Arquivo.addAction(self.action_Registro_Funcionario)
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        self.menuA_juda.addAction(self.actionContato)
+        # self.menuA_juda.addAction(self.actionContato)
         self.menu_Lista_de_Clientes.addAction(self.action_Visualizar)
-        self.menu_Lista_de_Clientes.addAction(self.action_Informa_es)
+        # self.menu_Lista_de_Clientes.addAction(self.action_Informa_es)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
         self.menubar.addAction(self.menu_Lista_de_Clientes.menuAction())
         self.menubar.addAction(self.menuA_juda.menuAction())
         self.label.setBuddy(self.inp_email)
         self.label_7.setBuddy(self.inp_numero_conta)
+
+        '''atr'''
+        self.actionSobre.triggered.connect(self.sobre_window)
+        self.action_Exit.triggered.connect(lambda: MainWindow.close())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -170,21 +176,30 @@ class Ui_MainWindow(object):
         self.menu_Arquivo.setTitle(_translate("MainWindow", "&Arquivo"))
         self.menuA_juda.setTitle(_translate("MainWindow", "A&juda"))
         self.menu_Lista_de_Clientes.setTitle(_translate("MainWindow", "&Clientes"))
-        self.action_Registro_Funcionario.setText(_translate("MainWindow", "&Registro de Funcionários"))
-        self.action_Registro_Funcionario.setStatusTip(_translate("MainWindow", "Voltar para tela de Login"))
-        self.action_Registro_Funcionario.setShortcut(_translate("MainWindow", "Ctrl+R"))
+        # self.action_Registro_Funcionario.setText(_translate("MainWindow", "&Registro de Funcionários"))
+        # self.action_Registro_Funcionario.setStatusTip(_translate("MainWindow", "Voltar para tela de Login"))
+        # self.action_Registro_Funcionario.setShortcut(_translate("MainWindow", "Ctrl+R"))
         self.action_Exit.setText(_translate("MainWindow", "&Exit"))
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        self.actionContato.setText(_translate("MainWindow", "Contato"))
+        # self.actionContato.setText(_translate("MainWindow", "Contato"))
         self.action_Visualizar.setText(_translate("MainWindow", "&Visualizar"))
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
-        self.action_Informa_es.setText(_translate("MainWindow", "&Informações"))
+        # self.action_Informa_es.setText(_translate("MainWindow", "&Dados"))
+
+    '''met'''
+
+    def sobre_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sobre.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

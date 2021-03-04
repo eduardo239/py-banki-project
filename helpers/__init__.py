@@ -27,7 +27,7 @@ def box_mensagem_fail(tipo):
     if tipo == 'vazio':
         msg.setText(err_campos_vazios)
     elif tipo == 'invalido':
-        msg.setText('invalido')
+        msg.setText(err_tipo_invalido)
     elif tipo == 'nao_encontrado':
-        msg.setText('nao encontrado')
+        msg.setText(err_conta_nao_encontrada)
     msg.exec_()

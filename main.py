@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 
-from ui_ import Registro_Cliente, Registro_Funcionario, Login_Usuario, Login_Funcionario
+from ui_ import Registro_Cliente, Registro_Funcionario, Login_Usuario, Login_Funcionario, Sobre
 from db import connection
 from style import *
 
@@ -101,15 +101,15 @@ class Ui_MainWindow(object):
         self.action_Exit.setObjectName("action_Exit")
         self.actionSobre = QtWidgets.QAction(MainWindow)
         self.actionSobre.setObjectName("actionSobre")
-        self.actionContato = QtWidgets.QAction(MainWindow)
-        self.actionContato.setObjectName("actionContato")
+        # self.actionContato = QtWidgets.QAction(MainWindow)
+        # self.actionContato.setObjectName("actionContato")
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
         self.action_Visualizar.setObjectName("action_Visualizar")
         self.action_Informa_es = QtWidgets.QAction(MainWindow)
         self.action_Informa_es.setObjectName("action_Informa_es")
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        self.menuA_juda.addAction(self.actionContato)
+        # self.menuA_juda.addAction(self.actionContato)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
         self.menubar.addAction(self.menuA_juda.menuAction())
 
@@ -121,6 +121,7 @@ class Ui_MainWindow(object):
 
         '''var'''
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
+        self.actionSobre.triggered.connect(self.sobre_window)
         self.btn_registro_cliente.clicked.connect(self.registro_cliente)
         self.btn_registro_funcionario.clicked.connect(self.registro_funcionario)
         self.btn_login_cliente.clicked.connect(self.login_cliente)
@@ -155,7 +156,7 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        self.actionContato.setText(_translate("MainWindow", "Contato"))
+        # self.actionContato.setText(_translate("MainWindow", "Contato"))
         self.action_Visualizar.setText(_translate("MainWindow", "&Visualizar"))
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
         self.action_Informa_es.setText(_translate("MainWindow", "&Informações"))
@@ -186,6 +187,12 @@ class Ui_MainWindow(object):
         MainWindow.close()
         self.window = QtWidgets.QMainWindow()
         self.ui = Registro_Funcionario.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def sobre_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sobre.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 

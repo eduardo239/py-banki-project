@@ -2,24 +2,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from PyQt5.QtSql import QSqlTableModel
+from PyQt5.QtCore import Qt
+import time
 
 from db import *
 from typo import *
 from style import *
-
-
-def box_mensagem_ok(tipo):
-    msg = QMessageBox()
-    msg.setWindowTitle('Sucesso')
-    msg.setIcon(QMessageBox.Information)
-
-    if tipo == 'depositar':
-        msg.setText(suc_deposito)
-    elif tipo == 'sacar':
-        msg.setText(suc_saque)
-    elif tipo == 'transferir':
-        msg.setText(suc_transferencia)
-    msg.exec_()
+from ui_ import Sobre
+from helpers import *
 
 
 class Ui_MainWindow(object):
@@ -34,7 +24,7 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(697, 437)
+        MainWindow.resize(900, 470)
 
         MainWindow.setStyleSheet(window)
         self.validate = QRegExpValidator(QRegExp("[0-9.]{12}"))
@@ -49,15 +39,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.groupBox)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.lbl_title = QtWidgets.QLabel(self.groupBox)
-        font = QtGui.QFont()
-        font.setFamily("Roboto Mono")
-        font.setPointSize(20)
-        self.lbl_title.setFont(font)
         self.lbl_title.setStyleSheet(lbl_title_green)
         self.lbl_title.setObjectName("lbl_title")
         self.horizontalLayout.addWidget(self.lbl_title)
         self.lbl_meu_nome = QtWidgets.QLabel(self.groupBox)
-        self.lbl_meu_nome.setStyleSheet(lbl_small_grey)
+        self.lbl_meu_nome.setStyleSheet(lbl_meu_nome)
         self.lbl_meu_nome.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.lbl_meu_nome.setObjectName("lbl_meu_nome")
         self.horizontalLayout.addWidget(self.lbl_meu_nome)
@@ -131,22 +117,31 @@ class Ui_MainWindow(object):
         self.tab_2.setObjectName("tab_2")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.tab_2)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
-        self.label_7 = QtWidgets.QLabel(self.tab_2)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.label_7.setFont(font)
-        self.label_7.setStyleSheet("color: \'#333A44\'; padding: 16px 0;")
-        self.label_7.setObjectName("label_7")
-        self.verticalLayout_9.addWidget(self.label_7)
+        self.lbl_sacar = QtWidgets.QLabel(self.tab_2)
+        self.lbl_sacar.setStyleSheet(lbl_small_grey)
+        self.lbl_sacar.setObjectName("lbl_sacar")
+        self.verticalLayout_9.addWidget(self.lbl_sacar)
 
         '''tab extrato'''
         self.model = QSqlTableModel()
         self.model.setTable('historico')
+        self.model.setFilter(f'numero_conta = {self.numero_da_conta}')
+        self.model.setSort(6, Qt.SortOrder(Qt.DescendingOrder))
+        self.model.removeColumn(1)
+        # self.model.setHeaderData(1, Qt.Horizontal, "Número da Conta")
+        self.model.setHeaderData(1, Qt.Horizontal, "Valor")
+        self.model.setHeaderData(2, Qt.Horizontal, "Saldo Anterior")
+        self.model.setHeaderData(3, Qt.Horizontal, "Saldo Atual")
+        self.model.setHeaderData(4, Qt.Horizontal, "Operação")
+        self.model.setHeaderData(5, Qt.Horizontal, "Conta Destino")
+        self.model.setHeaderData(6, Qt.Horizontal, "Data")
         self.model.select()
 
         self.tab_extrato = QtWidgets.QTableView(self.tab_2)
         self.tab_extrato.setObjectName("tab_extrato")
+        self.tab_extrato.resizeColumnsToContents()
+        self.tab_extrato.resizeRowsToContents()
+        self.tab_extrato.horizontalHeader().setStretchLastSection(True)
         self.tab_extrato.setModel(self.model)
         self.tab_extrato.hideColumn(0)
 
@@ -360,28 +355,22 @@ class Ui_MainWindow(object):
         self.action_Registro_Funcionario = QtWidgets.QAction(MainWindow)
         self.action_Registro_Funcionario.setIcon(icon)
         self.action_Registro_Funcionario.setObjectName("action_Registro_Funcionario")
-
         self.action_Exit = QtWidgets.QAction(MainWindow)
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap("./assets/12355707351582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Exit.setIcon(icon5)
         self.action_Exit.setObjectName("action_Exit")
-
         self.actionSobre = QtWidgets.QAction(MainWindow)
         self.actionSobre.setObjectName("actionSobre")
-
-        self.actionContato = QtWidgets.QAction(MainWindow)
-        self.actionContato.setObjectName("actionContato")
-
+        # self.actionContato = QtWidgets.QAction(MainWindow)
+        # self.actionContato.setObjectName("actionContato")
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
         self.action_Visualizar.setObjectName("action_Visualizar")
-
         self.action_Informa_es = QtWidgets.QAction(MainWindow)
         self.action_Informa_es.setObjectName("action_Informa_es")
-
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        self.menuA_juda.addAction(self.actionContato)
+        # self.menuA_juda.addAction(self.actionContato)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
         self.menubar.addAction(self.menuA_juda.menuAction())
 
@@ -398,12 +387,9 @@ class Ui_MainWindow(object):
         self.label_21.setBuddy(self.inp_agencia)
         self.label_22.setBuddy(self.inp_agencia)
 
-        '''str'''
-
-        self.extrato = extrato(self.numero_da_conta)
-
         '''atr'''
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
+        self.actionSobre.triggered.connect(self.sobre_window)
 
         self.btn_sacar.clicked.connect(self.sacar_)
         self.btn_sacar.setAutoDefault(True)
@@ -432,7 +418,6 @@ class Ui_MainWindow(object):
         self.inp_tipo_conta.setEnabled(False)
         self.inp_numero_conta.setText(str(self.numero_da_conta))
 
-        ''''''
         self.retranslateUi(MainWindow)
         self.tab_minha_conta.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -448,7 +433,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "Saldo Atual"))
         self.lbl_saldo_atual.setText(_translate("MainWindow", ""))
         self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab), _translate("MainWindow", "Home"))
-        self.label_7.setText(_translate("MainWindow", "Sacar"))
+        self.lbl_sacar.setText(_translate("MainWindow", "Extrato da Conta"))
         self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab_2), _translate("MainWindow", "Extrato"))
         self.label_11.setText(_translate("MainWindow", "Valor"))
         self.label_12.setText(_translate("MainWindow", "Número da Conta"))
@@ -477,7 +462,7 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        self.actionContato.setText(_translate("MainWindow", "Contato"))
+        # self.actionContato.setText(_translate("MainWindow", "Contato"))
         self.action_Visualizar.setText(_translate("MainWindow", "&Visualizar"))
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
         self.action_Informa_es.setText(_translate("MainWindow", "&Informações"))
@@ -487,83 +472,128 @@ class Ui_MainWindow(object):
     '''def'''
 
     def sacar_(self):
-        numero_conta = int(self.numero_da_conta)
-        if self.inp_valor_s.text() != '':
-            valor = self.inp_valor_s.text()
+        self.reset_campos()
+
+        valor = self.inp_valor_s.text() or 0
+
+        if valor != 0:
+            try:
+                dados = {
+                    'numero_conta_s': self.numero_da_conta,
+                    'valor': float(valor)
+                }
+                saldo_atual = sacar(dados)
+                log_sacar(dados)
+
+                self.lbl_mensagem.setText(atualizando)
+                self.label_18.setText(sacar_ok)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
+                box_mensagem_ok('sacar')
+            except Exception as e:
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.showMessage(str(e))
+                error_dialog.exec_()
+                self.lbl_mensagem.setText(sacar_fail)
+            finally:
+                time.sleep(1)
+                self.inp_valor_s.setText('')
+                self.atualiza_mensagem(saldo_atual)
+                self.model.select()
         else:
-            valor = 0
-
-        try:
-            saldo_anterior = get_saldo(numero_conta)
-            saldo_atual = float(saldo_anterior) - float(valor)
-            sacar(numero_conta, saldo_anterior, valor, saldo_atual)
-
-            self.label_18.setText(sacar_ok)
-            box_mensagem_ok('sacar')
-        except Exception as e:
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.showMessage(str(e))
-            error_dialog.exec_()
-            self.lbl_mensagem.setText(sacar_fail)
-        finally:
-            saldo = get_saldo(numero_conta)
-            self.inp_valor_d.setText('')
-            self.atualiza_mensagem(saldo)
+            self.label_19.setText(err_valor_zero)
+            self.atualizar_campos(err_valor_zero)
 
     def depositar(self):
-        valor = self.inp_valor_d.text()
-        numero_conta = self.numero_da_conta
+        self.reset_campos()
 
-        try:
-            saldo_anterior = get_saldo(numero_conta)
-            saldo_atual = float(saldo_anterior) + float(valor)
+        valor = self.inp_valor_d.text() or 0
 
-            depositar(numero_conta, saldo_atual, valor, saldo_anterior)
+        if valor != 0:
+            try:
+                dados = {
+                    'numero_conta_d': self.numero_da_conta,
+                    'valor': float(valor)
+                }
 
-            self.label_19.setText(depositar_ok)
-            box_mensagem_ok('depositar')
-        except Exception as e:
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.showMessage(str(e))
-            error_dialog.exec_()
-            self.lbl_mensagem.setText(sacar_fail)
-        finally:
-            saldo = get_saldo(numero_conta)
-            self.inp_valor_s.setText('')
-            self.atualiza_mensagem(saldo)
+                saldo_atual = depositar(dados)
+                log_depositar(dados)
+                print(saldo_atual)
+                self.lbl_mensagem.setText(atualizando)
+                self.label_19.setText(depositar_ok)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
+                box_mensagem_ok('depositar')
+            except Exception as e:
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.showMessage(str(e))
+                error_dialog.exec_()
+                self.lbl_mensagem.setText(sacar_fail)
+            finally:
+                time.sleep(1)
+                self.inp_valor_d.setText('')
+                self.atualiza_mensagem(saldo_atual)
+                self.model.select()
+        else:
+            self.label_19.setText(err_valor_zero)
+            self.atualizar_campos(err_valor_zero)
 
     def transferir(self):
-        valor = float(self.inp_valor_t.text())
-        conta_envia = int(self.numero_da_conta)
-        conta_recebe = int(self.inp_numero_conta_t.text())
+        self.reset_campos()
 
-        try:
-            saldo_antes_envia = float(get_saldo(conta_envia))
-            saldo_atual_envia = saldo_antes_envia - float(valor)
+        valor = self.inp_valor_t.text() or 0
+        conta_destino = self.inp_numero_conta_t.text() or 0
 
-            saldo_antes_recebe = float(get_saldo(conta_recebe))
-            saldo_atual_recebe = saldo_antes_recebe + float(valor)
+        if conta_destino == 0:
+            self.lbl_mensagem.setText(err_conta_nao_encontrada)
+            self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+            return
 
-            transferir(conta_envia, saldo_antes_envia, saldo_atual_envia, conta_recebe,
-                       saldo_antes_recebe, saldo_atual_recebe, valor)
+        if valor != 0:
+            try:
+                dados = {
+                    'numero_conta_s': self.numero_da_conta,
+                    'numero_conta_d': int(conta_destino),
+                    'valor': float(valor)
+                }
 
-            self.lbl_mensagem.setText(transferir_ok)
-            box_mensagem_ok('transferir')
-        except Exception as e:
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.showMessage(str(e))
-            error_dialog.exec_()
-            self.lbl_mensagem.setText(sacar_fail)
-        finally:
-            saldo = get_saldo(conta_envia)
-            self.inp_valor_s.setText('')
-            self.atualiza_mensagem(saldo)
+                saldo_atual = transferir(dados)
+                log_transferir(dados)
+
+                self.lbl_mensagem.setText(transferir_ok)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
+                box_mensagem_ok('transferir')
+                saldo = get_saldo(self.numero_da_conta)
+                self.lbl_saldo_atual.setText(str(saldo))
+            except Exception as e:
+                error_dialog = QtWidgets.QErrorMessage()
+                error_dialog.showMessage(str(e))
+                error_dialog.exec_()
+                self.lbl_mensagem.setText(sacar_fail)
+            finally:
+                self.atualiza_mensagem(saldo_atual)
+                self.model.select()
+        else:
+            self.label_19.setText(err_valor_zero)
+            self.atualizar_campos(err_valor_zero)
 
     def atualiza_mensagem(self, valor):
         self.lbl_saldo_atual.setText("${:,.2f}".format(valor))
         self.lbl_mensagem.setText("${:,.2f}".format(valor))
         self.label_19.setText("Saldo atual ${:,.2f}".format(valor))
         self.label_18.setText("Saldo atual ${:,.2f}".format(valor))
+
+    def reset_campos(self):
+        self.lbl_mensagem.setText('')
+        self.lbl_mensagem.setStyleSheet(lbl_mensagem_default)
+
+    def atualizar_campos(self, tipo):
+        self.lbl_mensagem.setText(tipo)
+        self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+
+    def sobre_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sobre.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 
 if __name__ == "__main__":

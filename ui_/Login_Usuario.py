@@ -97,7 +97,7 @@ class Ui_MainWindow(object):
         self.action_Informa_es.setObjectName("action_Informa_es")
         self.action_Registrar = QtWidgets.QAction(MainWindow)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../assets/15586770221582004499-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("./assets/15586770221582004499-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_Registrar.setIcon(icon2)
         self.action_Registrar.setObjectName("action_Registrar")
         self.menu_Arquivo.addAction(self.action_Registrar)
@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuA_juda.menuAction())
         self.label_7.setBuddy(self.inp_email_conta)
 
-        '''var'''
+        '''atr'''
         self.dados_usuario = ''
         self.btn_login.clicked.connect(self.login)
         self.action_Registrar.triggered.connect(self.registrar)
@@ -147,29 +147,33 @@ class Ui_MainWindow(object):
     '''def'''
 
     def minha_conta(self):
+        self.lbl_mensagem.setText('')
+        self.lbl_mensagem.setStyleSheet(lbl_mensagem_default)
         self.window = QtWidgets.QMainWindow()
         self.ui = Minha_Conta.Ui_MainWindow(self.dados_usuario)
         self.ui.setupUi(self.window)
         self.window.show()
 
-    '''def'''
-
     def login(self):
         email = self.inp_email_conta.text()
         senha = self.inp_senha.text()
 
-        self.lbl_mensagem.setText("")
-        self.lbl_mensagem.setStyleSheet(lbl_mensagem_default)
+        if email != '':
+            self.lbl_mensagem.setText("")
+            self.lbl_mensagem.setStyleSheet(lbl_mensagem_default)
 
-        try:
-            resultado = login_cliente(email=email, senha=senha)
-            self.dados_usuario = resultado
-            self.minha_conta()
-            self.lbl_mensagem.setText(suc_login)
-            self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
-        except Exception as e:
-            print(e)
-            self.lbl_mensagem.setText(err_usuario_nao_encontrado)
+            try:
+                resultado = login_cliente(email=email, senha=senha)
+                self.dados_usuario = resultado
+                self.minha_conta()
+                self.lbl_mensagem.setText(suc_login)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
+            except Exception as e:
+                print(e)
+                self.lbl_mensagem.setText(err_usuario_nao_encontrado)
+                self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+        else:
+            self.lbl_mensagem.setText(err_campos_vazios)
             self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
 
     def registrar(self):
