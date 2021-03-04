@@ -6,6 +6,8 @@ lbl_title_green = "color: '#1F2C41'; padding: 4px 0; margin-bottom: 10px; font-s
                   "font-family: 'Calibri, Helvetica, Georgia';"
 lbl_small_grey = "color: '#333A44'; font-size: 10pt; " \
                  "font-family: 'Calibri';"
+lbl_big_grey = "color: '#333A44'; font-size: 18pt; margin-bottom: 10px; " \
+                 "font-family: 'Calibri';"
 lbl_mensagem_default = "color: '#333A44'; padding: 14px 10px;"
 lbl_mensagem_error = "padding: 14px 10px; color: #721c24; background-color: '#FFD7D3'; " \
                "border: 1px solid '#E8A19E';"
@@ -13,7 +15,7 @@ lbl_mensagem_success = "color: #155724; background-color: #d4edda; border: 1px s
                        "padding: 14px 10px"
 
 lbl_data_default = "font: 12pt; font-weight: normal; font-family: 'Calibri'; color: '#333A44' "
-lbl_meu_nome = "font: 16pt; font-weight: normal; font-family: Lato; color: '#2b2b2b';"
+lbl_meu_nome = "font: 16pt; font-weight: normal; font-family: Lato; color: '#7C9CAB';"
 # input
 inp_default = "QLineEdit:focus { border: 2px solid #006080; }" \
               "QLineEdit { color: '#333A44'; padding: 6px 4px; margin-bottom: 10px; " \

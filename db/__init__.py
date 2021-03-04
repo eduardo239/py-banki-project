@@ -300,28 +300,27 @@ data_registro	TEXT
 """ - - - - - - - - - - - - - - registro - - - - - - - - - - - - - - """
 
 
-def registrar_funcionario(**kwargs):
-    data_formatada = datetime.strptime(kwargs["data_nascimento"], "%d/%m/%Y")
+def registrar_funcionario(dados):
+    print(dados)
+    data_formatada = datetime.strptime(dados["data_nascimento"], "%d/%m/%Y")
+    data_atual = datetime.now()
 
     try:
-        sql = f"""INSERT INTO funcionario (nome, email, senha, cargo, data_nascimento, data_registro) 
-        VALUES(
-        '{kwargs["nome"]}', '{kwargs["email"]}', '{kwargs["senha"]}', '{kwargs["cargo"]}', 
-        '{data_formatada}', '{datetime.now()}'
-        )"""
+        sql = f"""INSERT INTO funcionario (nome, email, senha, cargo, salario, data_nascimento, data_registro) 
+        VALUES('{dados["nome"]}', '{dados["email"]}', '{dados["senha"]}', '{dados["cargo"]}', {dados["salario"]}, 
+        '{data_formatada}', '{data_atual}')"""
 
-        try:
-            q = QSqlQuery()
-            q.exec_(sql)
-            print(sql)
+        q = QSqlQuery()
+        q.exec_(sql)
+        print(sql)
 
-            if q.result().lastError().text():
-                mensagem = q.result().lastError().text()
-                return False, mensagem
-            else:
-                return True, ''
-        except QSqlError as qc:
-            print(qc.result().lastError().text())
+        if q.result().lastError().text():
+            mensagem = q.result().lastError().text()
+            print(mensagem)
+            return False, mensagem
+        else:
+            return True, ''
+
     except QSqlError as qc:
         print(qc.result().lastError().text())
 
@@ -472,7 +471,7 @@ def get_saldo(numero_da_conta):
         print(err_buscar_saldo)
 
 
-""" - - - - - - - - - - - - - - métodos - - - - - - - - - - - - - - """
+""" - - - - - - - - - - - - - - logs - - - - - - - - - - - - - - """
 
 
 def log_depositar(dados):
@@ -531,6 +530,9 @@ def log_transferir(dados):
     except QSqlError as qc:
         print(qc.result().lastError().text())
         print(err_deposito)
+
+
+""" - - - - - - - - - - - - - - métodos - - - - - - - - - - - - - - """
 
 
 def sacar(dados):
@@ -597,27 +599,167 @@ def transferir(dados):
         print(err_sacar_transferencia)
 
 
+""" - - - - - - - - - - - - - - informações - - - - - - - - - - - - - - """
+connection()
 def extrato(numero_conta):
     print('- ' * 50)
-    sql = f"""SELECT saldo_anterior, saldo_atual, valor, operacao, data FROM historico
+    sql_e = f"""SELECT valor, saldo_anterior, saldo_atual, operacao, data FROM historico
         WHERE numero_conta = {numero_conta}"""
+
+    sql_t = f"""SELECT saldo_atual, data FROM historico WHERE numero_conta = {numero_conta}"""
+
+    dados = {
+        'valor': 0,
+        'saldo_anterior': 0,
+        'saldo_atual': 0,
+        'operacao': '',
+        'data': '',
+    }
+
     lista = []
+
+    try:
+        q = QSqlQuery()
+        q.exec_(sql_e)
+        print(sql_e)
+
+        q_2 = QSqlQuery()
+        q_2.exec_(sql_t)
+
+        if q.first():
+            dados['valor'] = q.value(0)
+            dados['saldo_anterior'] = q.value(1)
+            dados['saldo_atual'] = q.value(2)
+            dados['operacao'] = q.value(3)
+            dados['data'] = q.value(4)
+        else:
+            print('Nada encontrado')
+
+        while q_2.next():
+            lista.append([q_2.value(0), q_2.value(1)])
+
+    except QSqlError as qc:
+            print(qc.result().lastError().text())
+
+    return dados, lista
+
+
+""" - - - - - - - - - - - - - - dados gerais - - - - - - - - - - - - - - """
+
+
+def get_total_clientes():
+    sql = f"""SELECT nome, email, genero, data_registro FROM cliente;"""
 
     q = QSqlQuery()
     q.exec_(sql)
     print(sql)
 
+    q_last = QSqlQuery()
+    q_last.exec_(sql)
+
+    clientes = {
+        'total': 0,
+        'masculino': 0,
+        'feminino': 0,
+        'ultimo': ''
+    }
+
+    if q_last.last():
+        clientes['ultimo'] = str(q_last.value(3))
+
     while q.next():
-        saldo_anterior = q.value(0)
-        saldo_atual = q.value(1)
-        valor = q.value(2)
-        operacao = q.value(3)
-        data = q.value(4)
-        lista.append([saldo_anterior, saldo_atual, valor, operacao, data])
+        clientes['total'] += 1
+        if q.value(2) == 'masculino':
+            clientes['masculino'] += 1
+        else:
+            clientes['feminino'] += 1
 
-    return lista
+    return clientes
 
 
-'''
-return -1
-'''
+def get_total_contas():
+    sql = """SELECT tipo_conta FROM conta;"""
+    sum = """SELECT sum(saldo) FROM conta;"""
+
+    q = QSqlQuery()
+    q.exec_(sql)
+    print(sql)
+
+    qsum = QSqlQuery()
+    qsum.exec_(sum)
+
+    contas = {
+        'tipo': {
+            'corrente': 0,
+            'salario': 0,
+            'poupanca': 0,
+            'simples': 0
+        },
+        'saldo_total': 0
+    }
+
+    if q.first():
+        while q.next():
+            if q.value(0) == 'Salário':
+                contas['tipo']['salario'] += 1
+            elif q.value(0) == 'Poupança':
+                contas['tipo']['poupanca'] += 1
+            elif q.value(0) == 'Corrente':
+                contas['tipo']['corrente'] += 1
+            elif q.value(0) == 'Simples':
+                contas['tipo']['simples'] += 1
+            else:
+                pass
+
+    if qsum.first():
+        contas['saldo_total'] = qsum.value(0)
+
+    return contas
+
+
+def get_total_funcionarios():
+    sql = """SELECT nome, email, cargo, salario, data_nascimento, data_registro FROM funcionario;"""
+    sql_menor_salario = """SELECT min(salario) FROM funcionario"""
+    sql_maior_salario = """SELECT max(salario) FROM funcionario"""
+    sql_mais_velho = """SELECT min(data_nascimento) FROM funcionario;"""
+
+    q = QSqlQuery()
+    q.exec_(sql)
+    print(sql)
+
+    q_min = QSqlQuery()
+    q_min.exec_(sql_menor_salario)
+
+    q_max = QSqlQuery()
+    q_max.exec_(sql_maior_salario)
+
+    q_velho = QSqlQuery()
+    q_velho.exec_(sql_mais_velho)
+
+    funcionarios = {
+        'ultimo_nome': '',
+        'ultimo_data': '',
+        'ultimo_email': '',
+        'salario': 0,
+        'mais_velho': '',
+        'mais_novo': '',
+        'maior_salario': 0,
+        'menor_salario': 0
+    }
+
+    if q_min.first():
+        funcionarios['menor_salario'] = str(q.value(0))
+
+    if q_max.first():
+        funcionarios['maior_salario'] = str(q.value(0))
+
+    if q_velho.first():
+        funcionarios['mais_velho'] = str(q.value(0))
+
+    if q.last():
+        funcionarios['ultimo_nome'] = str(q.value(0))
+        funcionarios['ultimo_email'] = str(q.value(1))
+        funcionarios['ultimo_data'] = str(q.value(5))
+
+    return funcionarios
+

@@ -12,7 +12,7 @@ con, message = connection()
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(307, 316)
+        MainWindow.resize(310, 320)
         MainWindow.setStyleSheet(window)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)

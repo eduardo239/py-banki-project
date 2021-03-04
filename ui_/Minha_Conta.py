@@ -11,6 +11,8 @@ from style import *
 from ui_ import Sobre
 from helpers import *
 
+from dados import Grafico
+
 
 class Ui_MainWindow(object):
     def __init__(self, usuario):
@@ -105,6 +107,14 @@ class Ui_MainWindow(object):
         self.lbl_saldo_atual.setStyleSheet(lbl_title_green)
         self.lbl_saldo_atual.setObjectName("lbl_saldo_atual")
         self.verticalLayout_3.addWidget(self.lbl_saldo_atual)
+
+        '''info matplotlib'''
+        self.info = QtWidgets.QPushButton(self.groupBox_3)
+        self.info.setStyleSheet(btn_green)
+        self.info.setObjectName("btn_info")
+        self.verticalLayout_3.addWidget(self.info)
+        self.info.setText('Gráfico dos últimos dias')
+
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.verticalLayout_3.addItem(spacerItem1)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -138,6 +148,7 @@ class Ui_MainWindow(object):
         self.model.select()
 
         self.tab_extrato = QtWidgets.QTableView(self.tab_2)
+
         self.tab_extrato.setObjectName("tab_extrato")
         self.tab_extrato.resizeColumnsToContents()
         self.tab_extrato.resizeRowsToContents()
@@ -312,6 +323,9 @@ class Ui_MainWindow(object):
         self.btn_sacar = QtWidgets.QPushButton(self.groupBox_9)
         self.btn_sacar.setStyleSheet(btn_green)
         self.btn_sacar.setObjectName("btn_sacar")
+
+
+
         self.verticalLayout_4.addWidget(self.btn_sacar)
         spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem8)
@@ -418,6 +432,9 @@ class Ui_MainWindow(object):
         self.inp_tipo_conta.setEnabled(False)
         self.inp_numero_conta.setText(str(self.numero_da_conta))
 
+        '''teste'''
+        self.info.clicked.connect(self.info_window)
+
         self.retranslateUi(MainWindow)
         self.tab_minha_conta.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -471,6 +488,13 @@ class Ui_MainWindow(object):
 
     '''def'''
 
+    '''tst'''
+    def info_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Grafico.Ui_MainWindow(self.usuario)
+        self.ui.setupUi(self.window)
+        self.window.show()
+
     def sacar_(self):
         self.reset_campos()
 
@@ -517,7 +541,7 @@ class Ui_MainWindow(object):
 
                 saldo_atual = depositar(dados)
                 log_depositar(dados)
-                print(saldo_atual)
+
                 self.lbl_mensagem.setText(atualizando)
                 self.label_19.setText(depositar_ok)
                 self.lbl_mensagem.setStyleSheet(lbl_mensagem_success)
