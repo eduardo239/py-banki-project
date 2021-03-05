@@ -301,7 +301,6 @@ data_registro	TEXT
 
 
 def registrar_funcionario(dados):
-    print(dados)
     data_formatada = datetime.strptime(dados["data_nascimento"], "%d/%m/%Y")
     data_atual = datetime.now()
 

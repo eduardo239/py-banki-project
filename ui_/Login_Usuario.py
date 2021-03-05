@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from db import *
-from ui_ import Minha_Conta, Registro_Cliente
+from ui_ import Minha_Conta, Registro_Cliente, Sobre
 from typo import *
 from style import *
 
@@ -9,7 +9,7 @@ from style import *
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(322, 365)
+        MainWindow.resize(320, 365)
         MainWindow.setStyleSheet(window)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -88,9 +88,12 @@ class Ui_MainWindow(object):
         self.action_Exit.setObjectName("action_Exit")
 
         self.actionSobre = QtWidgets.QAction(MainWindow)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("./assets/9468673611582004493-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionSobre.setIcon(icon3)
         self.actionSobre.setObjectName("actionSobre")
-        self.actionContato = QtWidgets.QAction(MainWindow)
-        self.actionContato.setObjectName("actionContato")
+        # self.actionContato = QtWidgets.QAction(MainWindow)
+        # self.actionContato.setObjectName("actionContato")
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
         self.action_Visualizar.setObjectName("action_Visualizar")
         self.action_Informa_es = QtWidgets.QAction(MainWindow)
@@ -103,19 +106,23 @@ class Ui_MainWindow(object):
         self.menu_Arquivo.addAction(self.action_Registrar)
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        self.menuA_juda.addAction(self.actionContato)
+        # self.menuA_juda.addAction(self.actionContato)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
         self.menubar.addAction(self.menuA_juda.menuAction())
         self.label_7.setBuddy(self.inp_email_conta)
 
         '''atr'''
         self.dados_usuario = ''
+
         self.btn_login.clicked.connect(self.login)
+        self.btn_login.setAutoDefault(True)
+
         self.action_Registrar.triggered.connect(self.registrar)
+        self.actionSobre.triggered.connect(self.sobre_window)
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
+
         self.inp_email_conta.returnPressed.connect(self.login)
         self.inp_senha.returnPressed.connect(self.login)
-        self.btn_login.setAutoDefault(True)
         self.inp_email_conta.setText("nome@")
 
         self.retranslateUi(MainWindow)
@@ -137,7 +144,8 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        self.actionContato.setText(_translate("MainWindow", "Contato"))
+        self.actionSobre.setShortcut(_translate("MainWindow", "Ctrl+Z"))
+        # self.actionContato.setText(_translate("MainWindow", "Contato"))
         self.action_Visualizar.setText(_translate("MainWindow", "&Visualizar"))
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
         self.action_Informa_es.setText(_translate("MainWindow", "&Informações"))
@@ -179,6 +187,12 @@ class Ui_MainWindow(object):
     def registrar(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Registro_Cliente.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def sobre_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sobre.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 

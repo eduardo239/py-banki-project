@@ -23,7 +23,7 @@ class Canvas(FigureCanvas):
         super().__init__(fig)
 
         self.ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
-        self.ax.set_xlabel('X axis', fontsize=8)
+        self.ax.set_xlabel('Tempo', fontsize=8)
         self.ax.xaxis.get_label().set_fontsize(7)
         self.ax.grid()
 

@@ -10,11 +10,10 @@ from style import *
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(662, 432)
+        MainWindow.resize(800, 450)
         self.contas = get_total_contas()
         self.clientes = get_total_clientes()
         self.funcionarios = get_total_funcionarios()
-        print(self.funcionarios)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -158,9 +157,6 @@ class Ui_MainWindow(object):
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
         self.actionSobre.setShortcut(_translate("MainWindow", "Ctrl+X"))
-
-    '''def'''
-
 
 
 if __name__ == "__main__":

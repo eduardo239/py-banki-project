@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 
-from ui_ import Login_Funcionario, Login_Usuario
+from ui_ import Login_Funcionario, Sobre
 from db import registrar_funcionario
 from helpers import box_mensagem_ok, box_mensagem_fail
 from style import *
@@ -12,7 +12,7 @@ from typo import *
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(700, 465)
+        MainWindow.resize(800, 450)
         MainWindow.setStyleSheet(window)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -143,13 +143,13 @@ class Ui_MainWindow(object):
         self.action_Exit.setIcon(icon1)
         self.action_Exit.setObjectName("action_Exit")
         self.actionSobre = QtWidgets.QAction(MainWindow)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("./assets/9468673611582004493-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionSobre.setIcon(icon2)
         self.actionSobre.setObjectName("actionSobre")
-        self.actionContato = QtWidgets.QAction(MainWindow)
-        self.actionContato.setObjectName("actionContato")
         self.menu_Arquivo.addAction(self.action_Login)
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        self.menuA_juda.addAction(self.actionContato)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
         self.menubar.addAction(self.menuA_juda.menuAction())
         self.label.setBuddy(self.inp_nome)
@@ -166,6 +166,7 @@ class Ui_MainWindow(object):
         self.btn_registro.setCursor(QCursor(Qt.PointingHandCursor))
         self.btn_registro.setAutoDefault(True)
         self.action_Login.triggered.connect(self.login)
+        self.actionSobre.triggered.connect(self.sobre_window)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -200,7 +201,7 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        self.actionContato.setText(_translate("MainWindow", "Contato"))
+        self.actionSobre.setShortcut(_translate("MainWindow", "Ctrl+Z"))
 
     '''met'''
     def registrar(self):
@@ -247,6 +248,13 @@ class Ui_MainWindow(object):
     def atualizar_campos(self, tipo):
         self.lbl_mensagem.setText(tipo)
         self.lbl_mensagem.setStyleSheet(lbl_mensagem_error)
+
+    def sobre_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Sobre.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
 
 if __name__ == "__main__":
     import sys

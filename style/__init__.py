@@ -13,7 +13,7 @@ lbl_mensagem_error = "padding: 14px 10px; color: #721c24; background-color: '#FF
                "border: 1px solid '#E8A19E';"
 lbl_mensagem_success = "color: #155724; background-color: #d4edda; border: 1px solid '#c3e6cb';" \
                        "padding: 14px 10px"
-
+lbl_title_secondary = "font-size: 16pt; font-family: Lato; font-weight: normal; color: '#333A44';"
 lbl_data_default = "font: 12pt; font-weight: normal; font-family: 'Calibri'; color: '#333A44' "
 lbl_meu_nome = "font: 16pt; font-weight: normal; font-family: Lato; color: '#7C9CAB';"
 # input
@@ -21,7 +21,7 @@ inp_default = "QLineEdit:focus { border: 2px solid #006080; }" \
               "QLineEdit { color: '#333A44'; padding: 6px 4px; margin-bottom: 10px; " \
               "font: 10pt 'Calibri'; border: 2px solid #eeeeee; }"
 inp_data = "QDateEdit { padding: 6px; color: '#333A44'; font: 10pt 'Calibri'; " \
-           "border: 2px solid #eeeeee; }" \
+           "border: 1px solid #eeeeee; }" \
            "QDateEdit:focus { border: 2px solid #006080; }"
 
 # combo

@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QRegExpValidator
+from PyQt5.QtGui import QRegExpValidator, QPixmap, QIcon
 from PyQt5.QtSql import QSqlTableModel
 from PyQt5.QtCore import Qt
 import time
@@ -8,7 +8,7 @@ import time
 from db import *
 from typo import *
 from style import *
-from ui_ import Sobre
+from ui_ import Sobre, Contato
 from helpers import *
 
 from dados import Grafico
@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(900, 470)
+        MainWindow.resize(900, 550)
 
         MainWindow.setStyleSheet(window)
         self.validate = QRegExpValidator(QRegExp("[0-9.]{12}"))
@@ -115,6 +115,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.info)
         self.info.setText('Gráfico dos últimos dias')
 
+        self.label_image = QtWidgets.QLabel()
+        self.pixmap = QPixmap('./assets/1388560951582004484-128.png')
+        self.label_image.setPixmap(self.pixmap)
+        self.label_image.resize(self.pixmap.width(), self.pixmap.height())
+        self.verticalLayout_3.addWidget(self.label_image)
+        ''''''
+
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.verticalLayout_3.addItem(spacerItem1)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -128,7 +135,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.tab_2)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
         self.lbl_sacar = QtWidgets.QLabel(self.tab_2)
-        self.lbl_sacar.setStyleSheet(lbl_small_grey)
+        self.lbl_sacar.setStyleSheet(lbl_title_secondary)
         self.lbl_sacar.setObjectName("lbl_sacar")
         self.verticalLayout_9.addWidget(self.lbl_sacar)
 
@@ -324,8 +331,6 @@ class Ui_MainWindow(object):
         self.btn_sacar.setStyleSheet(btn_green)
         self.btn_sacar.setObjectName("btn_sacar")
 
-
-
         self.verticalLayout_4.addWidget(self.btn_sacar)
         spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem8)
@@ -375,16 +380,22 @@ class Ui_MainWindow(object):
         self.action_Exit.setIcon(icon5)
         self.action_Exit.setObjectName("action_Exit")
         self.actionSobre = QtWidgets.QAction(MainWindow)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("./assets/9468673611582004493-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionSobre.setIcon(icon6)
         self.actionSobre.setObjectName("actionSobre")
-        # self.actionContato = QtWidgets.QAction(MainWindow)
-        # self.actionContato.setObjectName("actionContato")
+        self.actionContato = QtWidgets.QAction(MainWindow)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("./assets/2198796101582004488-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionContato.setIcon(icon7)
+        self.actionContato.setObjectName("actionContato")
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
         self.action_Visualizar.setObjectName("action_Visualizar")
         self.action_Informa_es = QtWidgets.QAction(MainWindow)
         self.action_Informa_es.setObjectName("action_Informa_es")
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        # self.menuA_juda.addAction(self.actionContato)
+        self.menuA_juda.addAction(self.actionContato)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
         self.menubar.addAction(self.menuA_juda.menuAction())
 
@@ -404,6 +415,7 @@ class Ui_MainWindow(object):
         '''atr'''
         self.action_Exit.triggered.connect(lambda: MainWindow.close())
         self.actionSobre.triggered.connect(self.sobre_window)
+        self.actionContato.triggered.connect(self.contato_window)
 
         self.btn_sacar.clicked.connect(self.sacar_)
         self.btn_sacar.setAutoDefault(True)
@@ -442,7 +454,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.lbl_title.setText(_translate("MainWindow", "Minha Conta"))
+        self.lbl_title.setText(_translate("MainWindow", "Bankii"))
         self.lbl_meu_nome.setText(_translate("MainWindow", self.nome_do_cliente))
         self.label_2.setText(_translate("MainWindow", "Agência"))
         self.label_3.setText(_translate("MainWindow", "Número da Conta"))
@@ -450,7 +462,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "Saldo Atual"))
         self.lbl_saldo_atual.setText(_translate("MainWindow", ""))
         self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab), _translate("MainWindow", "Home"))
-        self.lbl_sacar.setText(_translate("MainWindow", "Extrato da Conta"))
+        self.lbl_sacar.setText(_translate("MainWindow", "Extrato Bancário"))
         self.tab_minha_conta.setTabText(self.tab_minha_conta.indexOf(self.tab_2), _translate("MainWindow", "Extrato"))
         self.label_11.setText(_translate("MainWindow", "Valor"))
         self.label_12.setText(_translate("MainWindow", "Número da Conta"))
@@ -479,7 +491,7 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        # self.actionContato.setText(_translate("MainWindow", "Contato"))
+        self.actionContato.setText(_translate("MainWindow", "Contato"))
         self.action_Visualizar.setText(_translate("MainWindow", "&Visualizar"))
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
         self.action_Informa_es.setText(_translate("MainWindow", "&Informações"))
@@ -489,6 +501,7 @@ class Ui_MainWindow(object):
     '''def'''
 
     '''tst'''
+
     def info_window(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Grafico.Ui_MainWindow(self.usuario)
@@ -616,6 +629,12 @@ class Ui_MainWindow(object):
     def sobre_window(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Sobre.Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def contato_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Contato.Ui_MainWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 

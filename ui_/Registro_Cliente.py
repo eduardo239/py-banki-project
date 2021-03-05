@@ -198,17 +198,23 @@ class Ui_MainWindow(object):
         self.action_Exit.setIcon(icon1)
         self.action_Exit.setObjectName("action_Exit")
         self.actionSobre = QtWidgets.QAction(MainWindow)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("./assets/9468673611582004493-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionSobre.setIcon(icon2)
         self.actionSobre.setObjectName("actionSobre")
-        # self.actionContato = QtWidgets.QAction(MainWindow)
-        # self.actionContato.setObjectName("actionContato")
         self.action_Visualizar = QtWidgets.QAction(MainWindow)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("./assets/9104314201582004494-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.action_Visualizar.setIcon(icon3)
         self.action_Visualizar.setObjectName("action_Visualizar")
         self.action_Informa_es = QtWidgets.QAction(MainWindow)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("./assets/2058381931582004487-128.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.action_Informa_es.setIcon(icon4)
         self.action_Informa_es.setObjectName("action_Informa_es")
         self.menu_Arquivo.addAction(self.action_Registro_Funcionario)
         self.menu_Arquivo.addAction(self.action_Exit)
         self.menuA_juda.addAction(self.actionSobre)
-        # self.menuA_juda.addAction(self.actionContato)
         self.menu_Lista_de_Clientes.addAction(self.action_Visualizar)
         self.menu_Lista_de_Clientes.addAction(self.action_Informa_es)
         self.menubar.addAction(self.menu_Arquivo.menuAction())
@@ -284,6 +290,7 @@ class Ui_MainWindow(object):
         self.menu_Arquivo.setTitle(_translate("MainWindow", "&Arquivo"))
         self.menuA_juda.setTitle(_translate("MainWindow", "A&juda"))
         self.menu_Lista_de_Clientes.setTitle(_translate("MainWindow", "&Clientes"))
+
         self.action_Registro_Funcionario.setText(_translate("MainWindow", "&Registro de Funcionários"))
         self.action_Registro_Funcionario.setStatusTip(_translate("MainWindow", "Voltar para tela de Login"))
         self.action_Registro_Funcionario.setShortcut(_translate("MainWindow", "Ctrl+R"))
@@ -291,10 +298,10 @@ class Ui_MainWindow(object):
         self.action_Exit.setStatusTip(_translate("MainWindow", "Fechar o aplicativo"))
         self.action_Exit.setShortcut(_translate("MainWindow", "Ctrl+W"))
         self.actionSobre.setText(_translate("MainWindow", "Sobre"))
-        # self.actionContato.setText(_translate("MainWindow", "Contato"))
         self.action_Visualizar.setText(_translate("MainWindow", "&Visualizar"))
         self.action_Visualizar.setShortcut(_translate("MainWindow", "Ctrl+D"))
         self.action_Informa_es.setText(_translate("MainWindow", "&Dados"))
+        self.action_Informa_es.setShortcut(_translate("MainWindow", "Ctrl+F"))
 
     '''def'''
 
@@ -310,7 +317,7 @@ class Ui_MainWindow(object):
         numero_conta = self.inp_numero_conta.text()
         agencia = self.inp_agencia.text().strip()
         tipo = self.cmb_tipo.currentText()
-        saldo = self.inp_saldo.text()
+        saldo = self.inp_saldo.text() or 0
 
         if nome == '' or email == '' or senha == '' or numero_conta == '' or agencia == '':
             box_mensagem_fail('vazio')
@@ -319,6 +326,18 @@ class Ui_MainWindow(object):
             return
 
         try:
+            dados = {
+                'nome': nome,
+                'email': email,
+                'senha': senha,
+                'genero': genero,
+                'data_nascimento': data_nascimento,
+                'numero_conta': numero_conta,
+                'agencia': agencia,
+                'tipo': tipo,
+                'saldo': saldo,
+            }
+            print(dados)
             ok, mensagem = registrar_cliente(nome=nome, email=email, senha=senha, genero=genero,
                                              data_nascimento=data_nascimento,
                                              numero_da_conta=numero_conta, agencia=agencia,
